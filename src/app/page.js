@@ -1,8 +1,8 @@
-import AboutUs from "@/components/aboutUs/AboutUs";
-import Banner from "@/components/banner/Banner";
-import HowItWorks from "@/components/HowItWorks.jsx/HowItWorks";
-import OurService from "@/components/ourService/OurService";
-import Testimonial from "@/components/testimonial/Testimonial";
+import AboutUs from "@/components/home/AboutUs";
+import Banner from "@/components/home/Banner";
+import HowItWorks from "@/components/home/HowItWorks";
+import OurService from "@/components/home/OurService";
+import Testimonial from "@/components/home/Testimonial";
 
 
 export default function Home() {
