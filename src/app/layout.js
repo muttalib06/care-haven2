@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
 
         {/* main content */}
 
-        <main>{children}</main>
+        <main className=" bg-linear-to-b from-white to-blue-50">{children}</main>
 
         {/* footer */}
 

@@ -108,7 +108,7 @@ const Testimonial= () => {
   };
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-white to-blue-50 overflow-hidden">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
