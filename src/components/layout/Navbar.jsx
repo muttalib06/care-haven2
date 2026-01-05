@@ -52,12 +52,12 @@ function Navbar(props) {
             >
             Find Caregivers
             </Link>
-            <a
-              href="#about"
+            <Link
+              href="/aboutUs"
               className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
             >
               About Us
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Auth Buttons & Avatar */}
