@@ -17,7 +17,7 @@ export default function FindCaregiversPage() {
 
   // Use custom filter hook
   const filterState = useCaregiversFilter(CAREGIVERS);
-  console.log(filterState)
+  // console.log(filterState)
 
   const toggleSave = (id) => {
     setSavedCaregivers((prev) => {
