@@ -55,7 +55,7 @@ export default function Banner() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  });
 
   return (
     <div className="relative w-full h-125 md:h-150 lg:h-175 overflow-hidden bg-gray-900">

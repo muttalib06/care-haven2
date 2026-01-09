@@ -4,7 +4,6 @@ import HowItWorks from "@/components/home/HowItWorks";
 import OurService from "@/components/home/OurService";
 import Testimonial from "@/components/home/Testimonial";
 
-
 export default function Home() {
   return (
     <div>

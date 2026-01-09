@@ -1,7 +1,7 @@
 "use client";
 
 // app/find-caregivers/page.js
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter } from "lucide-react";
 import { useCaregiversFilter } from "@/hooks/useCaregiversFilter";
 import SearchHeader from "@/components/find-caregivers/SearchHeader";
@@ -15,7 +15,7 @@ export default function FindCaregiversPage() {
   const [savedCaregivers, setSavedCaregivers] = useState(new Set());
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const { data: caregivers = [], isLoading, error, } = useCaregivers();
+  const { data: caregivers = [], isLoading, error } = useCaregivers();
   const caregiversData = caregivers?.data;
   // console.log(caregiversData);
 

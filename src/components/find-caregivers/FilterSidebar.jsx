@@ -1,5 +1,6 @@
-// components/find-caregivers/FilterSidebar.js
+
 import { SERVICE_TYPES, EXPERIENCE_LEVELS } from "@/data/caregivers";
+import { useEffect } from "react";
 
 export default function FilterSidebar({
   selectedServices,
@@ -15,6 +16,26 @@ export default function FilterSidebar({
   activeFiltersCount,
   clearAllFilters,
 }) {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [
+    selectedServices,
+    toggleService,
+    priceRange,
+    setPriceRange,
+    experienceLevel,
+    toggleExperience,
+    showAvailableOnly,
+    setShowAvailableOnly,
+    showVerifiedOnly,
+    setShowVerifiedOnly,
+    activeFiltersCount,
+    clearAllFilters,
+  ]);
+
   return (
     <div className="space-y-6">
       {/* Service Type */}
