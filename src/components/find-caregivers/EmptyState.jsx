@@ -2,6 +2,7 @@
 "use client";
 
 import { Search, Filter, RefreshCw, Heart, AlertCircle } from "lucide-react";
+import Image from "next/image";
 
 export default function EmptyState({
   onClearFilters,
@@ -189,9 +190,11 @@ export function EmptyStateWithIllustration({
     <div className="bg-white rounded-lg shadow-md p-12">
       <div className="max-w-lg mx-auto text-center">
         {/* Custom Illustration */}
-        <img
+        <Image
           src={illustrationUrl}
           alt="No results"
+          width={400}
+          height={400}
           className="w-64 h-64 mx-auto mb-6"
         />
 

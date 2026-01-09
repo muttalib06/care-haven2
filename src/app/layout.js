@@ -2,6 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
+import Providers from "./Providers";
 
 const montSerrat = Montserrat({
   subsets: ["latin"],
@@ -17,7 +18,7 @@ export default function RootLayout({ children }) {
         {/* main content */}
 
         <main className=" bg-linear-to-b from-white to-blue-50">
-          {children}
+          <Providers>{children}</Providers>
         </main>
 
         {/* footer */}

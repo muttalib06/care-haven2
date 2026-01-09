@@ -1,4 +1,4 @@
-// components/find-caregivers/CaregiverCard.js
+
 "use client";
 
 import { Star, Heart, CheckCircle, Briefcase, Clock, DollarSign } from "lucide-react";

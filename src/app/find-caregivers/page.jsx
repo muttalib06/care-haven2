@@ -3,20 +3,24 @@
 // app/find-caregivers/page.js
 import { useState } from "react";
 import { Filter } from "lucide-react";
-import { CAREGIVERS } from "@/data/caregivers";
 import { useCaregiversFilter } from "@/hooks/useCaregiversFilter";
 import SearchHeader from "@/components/find-caregivers/SearchHeader";
 import FilterSidebar from "@/components/find-caregivers/FilterSidebar";
 import MobileFilterDrawer from "@/components/find-caregivers/MobileFilterDrawer";
 import CaregiverGrid from "@/components/find-caregivers/CaregiverGrid";
+import { useCaregivers } from "@/hooks/useCaregivers";
 
 export default function FindCaregiversPage() {
   const [location, setLocation] = useState("");
   const [savedCaregivers, setSavedCaregivers] = useState(new Set());
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
+  const { data: caregivers = [], isLoading, error, } = useCaregivers();
+  const caregiversData = caregivers?.data;
+  // console.log(caregiversData);
+
   // Use custom filter hook
-  const filterState = useCaregiversFilter(CAREGIVERS);
+  const filterState = useCaregiversFilter(caregiversData);
   // console.log(filterState)
 
   const toggleSave = (id) => {
@@ -113,6 +117,8 @@ export default function FindCaregiversPage() {
             <CaregiverGrid
               caregivers={filterState.filteredCaregivers}
               savedCaregivers={savedCaregivers}
+              loading={isLoading}
+              error={error}
               onToggleSave={toggleSave}
               onClearFilters={filterState.clearAllFilters}
             />

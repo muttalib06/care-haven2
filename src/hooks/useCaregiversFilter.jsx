@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
@@ -10,6 +9,10 @@ import { useState, useMemo, useCallback } from "react";
  * @returns {Object} Filter state and methods
  */
 export function useCaregiversFilter(caregivers, options = {}) {
+  // safety check
+  const safeCaregivers = useMemo(() => {
+    return Array.isArray(caregivers) ? caregivers : [];
+  }, [caregivers]);
   // Configuration
   const {
     initialSearchQuery = "",
@@ -93,7 +96,7 @@ export function useCaregiversFilter(caregivers, options = {}) {
 
   // Filter Logic
   const filteredCaregivers = useMemo(() => {
-    let results = [...caregivers];
+    let results = [...safeCaregivers];
 
     // Service type filter
     if (selectedServices.length > 0) {
@@ -166,7 +169,7 @@ export function useCaregiversFilter(caregivers, options = {}) {
 
     return results;
   }, [
-    caregivers,
+    safeCaregivers,
     selectedServices,
     priceRange,
     experienceLevel,
@@ -263,7 +266,7 @@ export function useCaregiversFilter(caregivers, options = {}) {
   // Filter statistics
   const filterStats = useMemo(() => {
     return {
-      total: caregivers.length,
+      total: safeCaregivers.length,
       filtered: filteredCaregivers.length,
       available: filteredCaregivers.filter((c) => c.available).length,
       verified: filteredCaregivers.filter((c) => c.verified).length,
@@ -282,7 +285,7 @@ export function useCaregiversFilter(caregivers, options = {}) {
             ).toFixed(1)
           : 0,
     };
-  }, [caregivers, filteredCaregivers]);
+  }, [safeCaregivers, filteredCaregivers]);
 
   // Check if any filters are active
   const hasActiveFilters = useMemo(() => {

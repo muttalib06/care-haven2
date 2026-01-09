@@ -9,9 +9,6 @@ const options = {
 let client;
 let clientPromise;
 
-// careHaven-use_41
-// MYNB1aiiaZJuZ7vM
-
 if (!process.env.MONGODB_URI) {
   throw new Error("Please add your Mongo URI to .env.local");
 }
