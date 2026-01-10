@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { getCollection } from "@/lib/db";
+import { ObjectId } from "mongodb";
 
 export async function GET() {
   try {
-    const caregivers = await getCollection("caregivers");
-    const allCaregivers = await caregivers.find({}).toArray();
+    const caregiversCollection = await getCollection("caregivers");
+    const allCaregivers = await caregiversCollection.find({}).toArray();
 
     return NextResponse.json({ success: true, data: allCaregivers });
   } catch (error) {
@@ -14,3 +15,5 @@ export async function GET() {
     );
   }
 }
+
+

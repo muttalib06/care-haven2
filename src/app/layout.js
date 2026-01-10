@@ -12,18 +12,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={montSerrat.className}>
       <body>
-        {/* navbar */}
-        <Navbar></Navbar>
+        <Providers>
+          {/* navbar */}
+          <Navbar></Navbar>
 
-        {/* main content */}
+          {/* main content */}
 
-        <main className=" bg-linear-to-b from-white to-blue-50">
-          <Providers>{children}</Providers>
-        </main>
+          <main className=" bg-linear-to-b from-white to-blue-50">
+            {children}
+          </main>
 
-        {/* footer */}
+          {/* footer */}
 
-        <Footer></Footer>
+          <Footer></Footer>
+        </Providers>
       </body>
     </html>
   );

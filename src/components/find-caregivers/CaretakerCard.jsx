@@ -1,8 +1,15 @@
-
 "use client";
 
-import { Star, Heart, CheckCircle, Briefcase, Clock, DollarSign } from "lucide-react";
+import {
+  Star,
+  Heart,
+  CheckCircle,
+  Briefcase,
+  Clock,
+  DollarSign,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
   const handleBookNow = () => {
@@ -44,7 +51,7 @@ export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
               <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#3490c5] transition-colors">
                 {caregiver.name}
               </h3>
-              
+
               {/* Verification Badge */}
               {caregiver.verified ? (
                 <div className="flex items-center gap-1 mt-1">
@@ -73,7 +80,9 @@ export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
             <Heart
               size={20}
               className={`transition-colors ${
-                isSaved ? "fill-red-500 text-red-500" : "text-gray-400 hover:text-red-400"
+                isSaved
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-400 hover:text-red-400"
               }`}
             />
           </button>
@@ -83,29 +92,26 @@ export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
         {caregiver.reviewCount > 0 ? (
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-1">
-              <Star
-                size={16}
-                className="fill-yellow-400 text-yellow-400"
-              />
+              <Star size={16} className="fill-yellow-400 text-yellow-400" />
               <span className="font-semibold text-gray-900">
                 {caregiver.rating.toFixed(1)}
               </span>
             </div>
             <span className="text-sm text-gray-500">
-              ({caregiver.reviewCount} {caregiver.reviewCount === 1 ? 'review' : 'reviews'})
+              ({caregiver.reviewCount}{" "}
+              {caregiver.reviewCount === 1 ? "review" : "reviews"})
             </span>
           </div>
         ) : (
-          <div className="mb-3 text-sm text-gray-500">
-            No reviews yet
-          </div>
+          <div className="mb-3 text-sm text-gray-500">No reviews yet</div>
         )}
 
         {/* Experience */}
         <div className="flex items-center gap-2 mb-3 text-gray-700">
           <Briefcase size={16} className="text-gray-400" />
           <span className="text-sm">
-            {caregiver.experience} {caregiver.experience === 1 ? 'year' : 'years'} experience
+            {caregiver.experience}{" "}
+            {caregiver.experience === 1 ? "year" : "years"} experience
           </span>
         </div>
 
@@ -158,12 +164,14 @@ export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
               {caregiver.hourlyRate}
               <span className="text-sm text-gray-500 font-normal">/hour</span>
             </div>
-            
+
             {/* Availability Status */}
             <div className="flex items-center gap-1 mt-1">
               <Clock
                 size={14}
-                className={caregiver.available ? "text-green-500" : "text-gray-400"}
+                className={
+                  caregiver.available ? "text-green-500" : "text-gray-400"
+                }
               />
               <span
                 className={`text-xs font-medium ${
@@ -176,20 +184,14 @@ export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
           </div>
 
           {/* Book Now Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent card click
-              handleBookNow();
-            }}
-            disabled={!caregiver.available}
-            className={`px-4 py-2 font-medium rounded-lg transition-all duration-200 ${
-              caregiver.available
-                ? "bg-[#3490c5] text-white hover:bg-[#2c7ab8] hover:shadow-md"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed"
-            }`}
-          >
-            {caregiver.available ? "Book Now" : "Unavailable"}
-          </button>
+
+          <Link href={`/caregivers/${caregiver._id}`}>
+            <button
+              className={`px-4 py-2 font-medium rounded-lg transition-all duration-200  bg-[#3490c5] text-white hover:bg-[#2c7ab8] hover:shadow-md`}
+            >
+              View Detail
+            </button>
+          </Link>
         </div>
       </div>
     </div>

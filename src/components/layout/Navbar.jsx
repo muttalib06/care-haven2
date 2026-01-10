@@ -47,7 +47,7 @@ function Navbar(props) {
               Home
             </Link>
             <Link
-              href="/find-caregivers"
+              href="/caregivers"
               className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
             >
             Find Caregivers
