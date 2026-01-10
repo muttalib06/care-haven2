@@ -6,8 +6,10 @@ import AvailabilityGrid from "@/components/caregiver/AvailabilityGrid";
 import EducationSection from "@/components/caregiver/EducationSection";
 import CertificatesSection from "@/components/caregiver/CertificatesSection";
 import BookingCard from "@/components/caregiver/BookingCard";
-import { use } from "react";
+import { use, useEffect } from "react";
 import useCaregiverDetails from "@/hooks/caregivers/useCaregiverDetails";
+import LoadingPage from "@/components/loading/LoadingPage";
+import DataFetchError from "@/components/errors/DataFetchError";
 // import { useRouter } from "next/router";
 // import { caregivers } from "../../data/caregivers";
 
@@ -16,22 +18,24 @@ export default function CaregiverProfilePage({ params }) {
 
   const resolvedParams = use(params);
   const id = resolvedParams.caregiverId;
-  console.log(id);
+  // console.log(id);
 
   // Find caregiver by ID
-  const { data: caregiver } =useCaregiverDetails(id);
-  console.log(caregiver);
+  const { data: caregiver, isLoading, error } = useCaregiverDetails(id);
+  // console.log(caregiver);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Handle loading state
-  if (!id) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3490c5] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+
+  if (isLoading) {
+    return <LoadingPage></LoadingPage>;
+  }
+
+  if (error) {
+    return <DataFetchError error={error}></DataFetchError>;
   }
 
   // Handle not found
@@ -62,14 +66,14 @@ export default function CaregiverProfilePage({ params }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content (70%) */}
           <div className="lg:col-span-2 space-y-6">
-            <AboutSection aboutMe={caregiver.aboutMe} />
+            <AboutSection aboutMe={caregiver?.aboutMe} />
             <SkillsSection
-              skills={caregiver.skills}
-              serviceTypes={caregiver.serviceTypes}
+              skills={caregiver?.skills}
+              serviceTypes={caregiver?.serviceTypes}
             />
-            <AvailabilityGrid availability={caregiver.availability} />
-            <EducationSection education={caregiver.education} />
-            <CertificatesSection certificates={caregiver.certificates} />
+            <AvailabilityGrid availability={caregiver?.availability} />
+            <EducationSection education={caregiver?.education} />
+            <CertificatesSection certificates={caregiver?.certificates} />
           </div>
 
           {/* Right Column - Booking Card (30%) */}
