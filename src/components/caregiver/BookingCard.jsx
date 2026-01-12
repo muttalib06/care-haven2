@@ -1,4 +1,5 @@
-import { Calendar, MessageCircle, Phone, Mail, Globe } from 'lucide-react';
+import { Phone, Mail, Globe } from "lucide-react";
+import BookingActions from "./BookingActions";
 
 export default function BookingCard({ caregiver }) {
   return (
@@ -30,16 +31,9 @@ export default function BookingCard({ caregiver }) {
           </div>
         </div>
 
-        {/* Action buttons */}
-        <div className="p-6 space-y-3">
-          <button className="w-full bg-[#3490c5] hover:bg-[#2d7ba8] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-            <Calendar className="w-5 h-5" />
-            Book Now
-          </button>
-          <button className="w-full border-2 border-[#3490c5] text-[#3490c5] hover:bg-blue-50 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-            <MessageCircle className="w-5 h-5" />
-            Send Message
-          </button>
+        {/* Action buttons - Now using client component */}
+        <div className="p-6">
+          <BookingActions caregiver={caregiver} />
         </div>
 
         {/* Contact info */}
@@ -54,7 +48,7 @@ export default function BookingCard({ caregiver }) {
           </div>
           <div className="flex items-center gap-3 text-gray-700">
             <Globe className="w-4 h-4 text-[#3490c5]" />
-            <span>{caregiver.languages.join(', ')}</span>
+            <span>{caregiver.languages.join(", ")}</span>
           </div>
         </div>
       </div>
