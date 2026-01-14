@@ -1,64 +1,33 @@
 "use client";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff, Heart, Shield, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signupAction } from "../actions/auth";
-import LoadingPage from "@/components/loading/LoadingPage";
-import { signupSchema } from "@/lib/validation/auth";
-import { useRouter } from "next/navigation";
 
-const SignUp = () => {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    resolver: zodResolver(signupSchema),
-    mode: "onBlur",
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
   });
 
-  const onSubmit = async (data) => {
-    setServerError("");
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-    startTransition(async () => {
-      try {
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("email", data.email);
-        formData.append("password", data.password);
-        formData.append("confirmPassword", data.confirmPassword);
-
-        const result = await signupAction(formData);
-
-        if (result.success) {
-          reset();
-          router.push("/login");
-        } else {
-          setServerError(result.message || "Something went wrong");
-        }
-      } catch (error) {
-        setServerError("Something went wrong. Please try again");
-      }
-    });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted:", formData);
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  if (isPending) {
-    return <LoadingPage />;
-  }
+        window.scrollTo(0,0)
+  },[])
 
   return (
     <div className="min-h-screen my-10 flex flex-col lg:flex-row bg-background">
@@ -68,14 +37,14 @@ const SignUp = () => {
           {/* Header */}
           <div className="mb-4">
             <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">
-              Create your account
+              Welcome back
             </h1>
             <p className="text-muted-foreground text-sm">
-              Join thousands of families finding trusted care
+              Sign in to continue to your account
             </p>
           </div>
 
-          {/* Social Sign Up */}
+          {/* Social Sign In */}
           <div className="space-y-2 mb-4">
             <button
               type="button"
@@ -116,35 +85,13 @@ const SignUp = () => {
           <div className="relative flex items-center mb-4">
             <div className="grow border-t border-border"></div>
             <span className="px-3 text-xs text-muted-foreground bg-background">
-              or sign up with email
+              or sign in with email
             </span>
             <div className="grow border-t border-border"></div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-            <div>
-              <label
-                htmlFor="fullName"
-                className="block text-xs font-medium text-foreground mb-1"
-              >
-                Full Name
-              </label>
-              <input
-                {...register("name")}
-                type="text"
-                id="name"
-                placeholder="Enter your full name"
-                className="w-full px-3 py-2 text-sm rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-              />
-
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div>
               <label
                 htmlFor="email"
@@ -153,18 +100,14 @@ const SignUp = () => {
                 Email Address
               </label>
               <input
-                {...register("email")}
                 type="email"
                 id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 className="w-full px-3 py-2 text-sm rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
               />
-
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.email.message}
-                </p>
-              )}
             </div>
 
             <div>
@@ -176,10 +119,12 @@ const SignUp = () => {
               </label>
               <div className="relative">
                 <input
-                  {...register("password")}
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  placeholder="Create a password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
                   className="w-full px-3 py-2 pr-10 text-sm rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                 />
                 <button
@@ -194,86 +139,44 @@ const SignUp = () => {
                   )}
                 </button>
               </div>
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-xs font-medium text-foreground mb-1"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 <input
-                  {...register("confirmPassword")}
-                  type={showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  placeholder="Confirm your password"
-                  className="w-full px-3 py-2 pr-10 text-sm rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  type="checkbox"
+                  id="rememberMe"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                  className="w-4 h-4 rounded border-input text-primary focus:ring-ring cursor-pointer"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                <label
+                  htmlFor="rememberMe"
+                  className="text-xs text-muted-foreground cursor-pointer"
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
+                  Remember me
+                </label>
               </div>
-
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-start gap-2">
-              <input
-                required
-                type="checkbox"
-                id="agreeToTerms"
-                className="mt-0.5 w-4 h-4 rounded border-input text-primary focus:ring-ring cursor-pointer"
-              />
-              <label
-                htmlFor="agreeToTerms"
-                className="text-xs text-muted-foreground cursor-pointer"
-              >
-                I agree to the{" "}
-                <span className="text-primary hover:underline font-medium cursor-pointer">
-                  Terms of Service
-                </span>{" "}
-                and{" "}
-                <span className="text-primary hover:underline font-medium cursor-pointer">
-                  Privacy Policy
-                </span>
-              </label>
+              <span className="text-xs text-primary hover:underline font-medium cursor-pointer">
+                Forgot password?
+              </span>
             </div>
 
             <button
               type="submit"
-              className="w-full py-2.5 px-4 text-sm bg-[#3490c5] text-white rounded-lg font-semibold hover:opacity-90 transition-all duration-200 shadow-care hover:shadow-care-lg transform hover:-translate-y-0.5"
+              className="w-full bg-[#3490c5] text-white py-2.5 px-4 text-sm bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-all duration-200 shadow-care hover:shadow-care-lg transform hover:-translate-y-0.5"
             >
-              Create Account
+              Sign In
             </button>
           </form>
 
-          {/* Login Link */}
+          {/* Sign Up Link */}
           <p className="mt-4 text-center text-muted-foreground text-xs">
-            Already have an account?{" "}
-            <Link
-              href={"/login"}
-              className="text-primary font-semibold hover:underline cursor-pointer"
-            >
-              Sign in
+            Don't have an account?{" "}
+            <Link href={"/signup"} className="text-primary font-semibold hover:underline cursor-pointer">
+              Sign up
             </Link>
           </p>
         </div>
@@ -290,8 +193,8 @@ const SignUp = () => {
             priority
             className="w-full h-full object-cover rounded-2xl"
           />
-          {/* FIXED GRADIENT - Using proper Tailwind classes */}
-          <div className="absolute inset-0 rounded-2xl  bg-linear-to-t from-[#3490c5]/90 via-[#3490c5]/50 to-transparent"></div>
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-linear-to-t rounded-2xl from-[#3490c5]/90 via-[#3490c5]/50 to-transparent"></div>
         </div>
 
         {/* Content Overlay */}
@@ -333,4 +236,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;

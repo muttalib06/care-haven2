@@ -85,12 +85,13 @@ function Navbar(props) {
             </div>
 
             {/* Login Button */}
-            <button
+            <Link
+             href={"/login"}
               className="px-5 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
               style={{ borderColor: "#3490c5", color: "#3490c5" }}
             >
               Login
-            </button>
+            </Link>
 
             {/* Register Button */}
             <Link
