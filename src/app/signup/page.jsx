@@ -1,21 +1,59 @@
 "use client";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff, Heart, Shield, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupAction } from "../actions/auth";
-import LoadingPage from "@/components/loading/LoadingPage";
 import { signupSchema } from "@/lib/validation/auth";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import LoadingPage from "@/components/loading/LoadingPage";
 
 const SignUp = () => {
+  const { signup, user, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
+
+  // console.log(user);
+
+  // helper function to handle error;
+
+  const handleError = (error) => {
+    if (!error) return setError("");
+    if (error.code) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          setError(
+            "This email is already registered. Please login or use another email."
+          );
+          break;
+
+        case "auth/invalid-email":
+          setError("Invalid email format.");
+          break;
+        case "auth/weak-password":
+          setError("Password is too weak. Must be at least 6 characters.");
+          break;
+        case "auth/user-not-found":
+          setError("No account found with this email. Please sign up first.");
+          break;
+        case "auth/popup-closed-by-user":
+          setError("Google sign-in was cancelled. Please try again.");
+          break;
+        case "auth/network-request-failed":
+          setError("Network error! Check your internet connection.");
+          break;
+        default:
+          setError("Something went wrong. Please try again.");
+      }
+    } else {
+      setError("An unexpected error occurred.");
+    }
+  };
 
   const {
     register,
@@ -28,36 +66,30 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data) => {
-    setServerError("");
-
-    startTransition(async () => {
-      try {
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("email", data.email);
-        formData.append("password", data.password);
-        formData.append("confirmPassword", data.confirmPassword);
-
-        const result = await signupAction(formData);
-
-        if (result.success) {
-          reset();
-          router.push("/login");
-        } else {
-          setServerError(result.message || "Something went wrong");
-        }
-      } catch (error) {
-        setServerError("Something went wrong. Please try again");
-      }
-    });
+    setError("");
+    setLoading(true);
+    try {
+      const email = data.email;
+      const password = data.password;
+      const name = data.name;
+      const image = "No image";
+      // console.log(email, password);
+      await signup(email, password);
+      await updateUserProfile(name, image);
+      router.push("/")
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  if (isPending) {
-    return <LoadingPage />;
+  if(loading){
+    return <LoadingPage></LoadingPage>
   }
 
   return (
@@ -101,7 +133,7 @@ const SignUp = () => {
               </svg>
               Continue with Google
             </button>
-            <button
+            {/* <button
               type="button"
               className="w-full flex items-center justify-center gap-3 px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors duration-200 font-medium text-foreground text-sm"
             >
@@ -109,7 +141,7 @@ const SignUp = () => {
                 <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
               </svg>
               Continue with GitHub
-            </button>
+            </button> */}
           </div>
 
           {/* Divider */}
@@ -257,6 +289,8 @@ const SignUp = () => {
                 </span>
               </label>
             </div>
+
+            <p className="my-2 text-sm text-red-600">{error}</p>
 
             <button
               type="submit"

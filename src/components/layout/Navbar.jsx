@@ -4,8 +4,11 @@ import React from "react";
 import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 function Navbar(props) {
+  const { user } = useAuth();
+  console.log(user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -50,7 +53,7 @@ function Navbar(props) {
               href="/caregivers"
               className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
             >
-            Find Caregivers
+              Find Caregivers
             </Link>
             <Link
               href="/aboutUs"
@@ -63,30 +66,17 @@ function Navbar(props) {
           {/* Desktop Auth Buttons & Avatar */}
           <div className="hidden md:flex md:items-center md:space-x-4">
             {/* Avatar */}
-            <div className="relative group">
-              <button className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200">
-                <User className="w-5 h-5 text-gray-600" />
-              </button>
-              {/* Dropdown placeholder */}
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
-                <a
-                  href="#profile"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Profile
-                </a>
-                <a
-                  href="#settings"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Settings
-                </a>
+            {user && (
+              <div className="relative group">
+                <button className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200">
+                  <User className="w-5 h-5 text-gray-600" />
+                </button>
               </div>
-            </div>
+            )}
 
             {/* Login Button */}
             <Link
-             href={"/login"}
+              href={"/login"}
               className="px-5 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
               style={{ borderColor: "#3490c5", color: "#3490c5" }}
             >
@@ -149,19 +139,21 @@ function Navbar(props) {
 
           {/* Mobile Avatar & Auth */}
           <div className="pt-4 pb-3 border-t border-gray-200">
-            <div className="flex items-center px-3 mb-3">
-              <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                  <User className="w-5 h-5 text-gray-600" />
+            {user && (
+              <div className="flex items-center px-3 mb-3">
+                <div className="shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    <User className="w-5 h-5 text-gray-600" />
+                  </div>
+                </div>
+                <div className="ml-3">
+                  <div className="text-sm font-medium text-gray-700">User</div>
+                  <div className="text-xs text-gray-500">
+                    {user ? "logged in" : "Not logged in"}{" "}
+                  </div>
                 </div>
               </div>
-              <div className="ml-3">
-                <div className="text-sm font-medium text-gray-700">
-                  Guest User
-                </div>
-                <div className="text-xs text-gray-500">Not logged in</div>
-              </div>
-            </div>
+            )}
 
             <div className="px-3 space-y-2">
               <button
