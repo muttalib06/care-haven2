@@ -5,11 +5,30 @@ import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import Swal from "sweetalert2";
 
 function Navbar(props) {
-  const { user } = useAuth();
-  console.log(user);
+  const { user, logout } = useAuth();
+  // console.log(user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      Swal.fire({
+        title: "Logout successfully",
+        icon: "success",
+        draggable: true,
+      });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+  };
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,20 +87,34 @@ function Navbar(props) {
             {/* Avatar */}
             {user && (
               <div className="relative group">
-                <button className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200">
+                <Link
+                  href={"/profile"}
+                  className="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors duration-200"
+                >
                   <User className="w-5 h-5 text-gray-600" />
-                </button>
+                </Link>
               </div>
             )}
 
-            {/* Login Button */}
-            <Link
-              href={"/login"}
-              className="px-5 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
-              style={{ borderColor: "#3490c5", color: "#3490c5" }}
-            >
-              Login
-            </Link>
+            {/* Login and logout Button */}
+
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="px-5 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
+                style={{ borderColor: "#3490c5", color: "#3490c5" }}
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                href={"/login"}
+                className="px-5 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
+                style={{ borderColor: "#3490c5", color: "#3490c5" }}
+              >
+                Login
+              </Link>
+            )}
 
             {/* Register Button */}
             <Link
@@ -142,9 +175,12 @@ function Navbar(props) {
             {user && (
               <div className="flex items-center px-3 mb-3">
                 <div className="shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                    <User className="w-5 h-5 text-gray-600" />
-                  </div>
+                  <Link href={"/profile"}>
+                    {" "}
+                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                      <User className="w-5 h-5 text-gray-600" />
+                    </div>
+                  </Link>
                 </div>
                 <div className="ml-3">
                   <div className="text-sm font-medium text-gray-700">User</div>
@@ -156,12 +192,24 @@ function Navbar(props) {
             )}
 
             <div className="px-3 space-y-2">
-              <button
-                className="w-full px-4 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
-                style={{ borderColor: "#3490c5", color: "#3490c5" }}
-              >
-                Login
-              </button>
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  className="w-full px-4 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
+                  style={{ borderColor: "#3490c5", color: "#3490c5" }}
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  href={"/login"}
+                  className="w-full px-4 py-2 text-sm font-medium border-2 rounded-lg transition-all duration-200"
+                  style={{ borderColor: "#3490c5", color: "#3490c5" }}
+                >
+                  Login
+                </Link>
+              )}
+
               <button
                 className="w-full px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-200"
                 style={{ backgroundColor: "#3490c5" }}

@@ -3,31 +3,142 @@ import { useEffect, useState } from "react";
 import { Eye, EyeOff, Heart, Shield, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/lib/validation/auth";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import LoadingPage from "@/components/loading/LoadingPage";
 
 const Login = () => {
+  const { login, loginWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  // helper function to handle error;
+
+  const handleError = (error) => {
+    if (!error) return setError("");
+    if (error.code) {
+      switch (error.code) {
+        // ========== Email/Password Login Errors ==========
+        case "auth/invalid-email":
+          setError("Invalid email format.");
+          break;
+
+        case "auth/user-not-found":
+          setError("No account found with this email.");
+          break;
+
+        case "auth/wrong-password":
+          setError("Incorrect password. Please try again.");
+          break;
+
+        case "auth/user-disabled":
+          setError("This account has been disabled. Contact support.");
+          break;
+
+        case "auth/invalid-credential":
+          setError("Invalid email or password. Please try again.");
+          break;
+
+        // ========== Google Sign-in Errors ==========
+        case "auth/popup-closed-by-user":
+          setError("Google sign-in was cancelled. Please try again.");
+          break;
+
+        case "auth/popup-blocked":
+          setError("Popup was blocked. Please allow popups and try again.");
+          break;
+
+        case "auth/cancelled-popup-request":
+          setError("Sign-in was cancelled. Please try again.");
+          break;
+
+        case "auth/account-exists-with-different-credential":
+          setError(
+            "An account exists with this email using a different sign-in method."
+          );
+          break;
+
+        case "auth/credential-already-in-use":
+          setError("This Google account is already linked to another user.");
+          break;
+
+        case "auth/operation-not-allowed":
+          setError("Google sign-in is not enabled. Contact support.");
+          break;
+
+        case "auth/unauthorized-domain":
+          setError("This domain is not authorized for Google sign-in.");
+          break;
+
+        // ========== Common Errors (Both Methods) ==========
+        case "auth/too-many-requests":
+          setError("Too many failed login attempts. Please try again later.");
+          break;
+
+        case "auth/network-request-failed":
+          setError("Network error. Check your internet connection.");
+          break;
+
+        case "auth/timeout":
+          setError("Sign-in timed out. Please try again.");
+          break;
+
+        default:
+          setError("Login failed. Please try again.");
+      }
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
+  });
+
+  const onsubmit = async (data) => {
+    setError("");
+    setLoading(true);
+    try {
+      const email = data.email;
+      const password = data.password;
+      await login(email, password);
+      router.push("/");
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await loginWithGoogle();
+      router.push("/");
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-        window.scrollTo(0,0)
-  },[])
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (loading) {
+    return <LoadingPage></LoadingPage>;
+  }
 
   return (
     <div className="min-h-screen my-10 flex flex-col lg:flex-row bg-background">
@@ -47,6 +158,7 @@ const Login = () => {
           {/* Social Sign In */}
           <div className="space-y-2 mb-4">
             <button
+              onClick={handleGoogleLogin}
               type="button"
               className="w-full flex items-center justify-center gap-3 px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors duration-200 font-medium text-foreground text-sm"
             >
@@ -70,7 +182,7 @@ const Login = () => {
               </svg>
               Continue with Google
             </button>
-            <button
+            {/* <button
               type="button"
               className="w-full flex items-center justify-center gap-3 px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors duration-200 font-medium text-foreground text-sm"
             >
@@ -78,7 +190,7 @@ const Login = () => {
                 <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
               </svg>
               Continue with GitHub
-            </button>
+            </button> */}
           </div>
 
           {/* Divider */}
@@ -91,7 +203,7 @@ const Login = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit(onsubmit)} className="space-y-3">
             <div>
               <label
                 htmlFor="email"
@@ -100,14 +212,18 @@ const Login = () => {
                 Email Address
               </label>
               <input
+                {...register("email")}
                 type="email"
                 id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
                 placeholder="Enter your email"
                 className="w-full px-3 py-2 text-sm rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
               />
+
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -119,11 +235,9 @@ const Login = () => {
               </label>
               <div className="relative">
                 <input
+                  {...register("password")}
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
                   placeholder="Enter your password"
                   className="w-full px-3 py-2 pr-10 text-sm rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                 />
@@ -139,6 +253,12 @@ const Login = () => {
                   )}
                 </button>
               </div>
+
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             {/* Remember Me & Forgot Password */}
@@ -147,9 +267,6 @@ const Login = () => {
                 <input
                   type="checkbox"
                   id="rememberMe"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
                   className="w-4 h-4 rounded border-input text-primary focus:ring-ring cursor-pointer"
                 />
                 <label
@@ -163,6 +280,7 @@ const Login = () => {
                 Forgot password?
               </span>
             </div>
+            <p className="my- 2text-sm text-red-600">{error}</p>
 
             <button
               type="submit"
@@ -175,7 +293,10 @@ const Login = () => {
           {/* Sign Up Link */}
           <p className="mt-4 text-center text-muted-foreground text-xs">
             Don't have an account?{" "}
-            <Link href={"/signup"} className="text-primary font-semibold hover:underline cursor-pointer">
+            <Link
+              href={"/signup"}
+              className="text-primary font-semibold hover:underline cursor-pointer"
+            >
               Sign up
             </Link>
           </p>

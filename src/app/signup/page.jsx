@@ -9,9 +9,10 @@ import { signupSchema } from "@/lib/validation/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import LoadingPage from "@/components/loading/LoadingPage";
+import { saveUser } from "@/data-handling/saveUser";
 
 const SignUp = () => {
-  const { signup, user, updateUserProfile } = useAuth();
+  const { signup, loginWithGoogle, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -74,9 +75,49 @@ const SignUp = () => {
       const name = data.name;
       const image = "No image";
       // console.log(email, password);
+      const formData = {
+        name: data.name,
+        email: email,
+        image: image,
+        phone: "No phone number",
+        dateOfBirth: "No date of birth",
+        address: "No address",
+        emergencyContact: "No number",
+        bio: "",
+        createdAt: new Date(),
+      };
+      saveUser(formData);
       await signup(email, password);
       await updateUserProfile(name, image);
-      router.push("/")
+      router.push("/");
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // google signup
+  const handleGoogleSignup = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const res = await loginWithGoogle();
+      const user = res.user;
+      const userInfo = {
+        name: user.displayName,
+        email: user.email,
+        image: user.photoUrl,
+        phone: "No phone number",
+        dateOfBirth: "No date of birth",
+        address: "No address",
+        emergencyContact: "No number",
+        bio: "",
+        createdAt: new Date(),
+      };
+
+      saveUser(userInfo);
+      router.push("/");
     } catch (error) {
       handleError(error);
     } finally {
@@ -88,8 +129,8 @@ const SignUp = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  if(loading){
-    return <LoadingPage></LoadingPage>
+  if (loading) {
+    return <LoadingPage></LoadingPage>;
   }
 
   return (
@@ -110,6 +151,7 @@ const SignUp = () => {
           {/* Social Sign Up */}
           <div className="space-y-2 mb-4">
             <button
+              onClick={handleGoogleSignup}
               type="button"
               className="w-full flex items-center justify-center gap-3 px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors duration-200 font-medium text-foreground text-sm"
             >
