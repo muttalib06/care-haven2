@@ -1,5 +1,4 @@
 
-import { SERVICE_TYPES, EXPERIENCE_LEVELS } from "@/data/caregivers";
 import { useEffect } from "react";
 
 export default function FilterSidebar({
@@ -16,6 +15,11 @@ export default function FilterSidebar({
   activeFiltersCount,
   clearAllFilters,
 }) {
+
+ const SERVICE_TYPES = ["Child", "Elderly", "Special Needs"];
+
+// Experience levels for filtering (matching your hook's logic)
+ const EXPERIENCE_LEVELS = ["1-3", "4-6", "7-9", "10+"];
   useEffect(() => {
     window.scrollTo({
       top: 0,

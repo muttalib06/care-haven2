@@ -29,7 +29,7 @@ const SignUp = () => {
       switch (error.code) {
         case "auth/email-already-in-use":
           setError(
-            "This email is already registered. Please login or use another email."
+            "This email is already registered. Please login or use another email.",
           );
           break;
 
@@ -80,10 +80,11 @@ const SignUp = () => {
         email: email,
         image: image,
         phone: "No phone number",
-        dateOfBirth: "No date of birth",
+        dateOfBirth: "1990-05-15",
         address: "No address",
         emergencyContact: "No number",
         bio: "",
+        role: "user",
         createdAt: new Date(),
       };
       saveUser(formData);
@@ -113,6 +114,7 @@ const SignUp = () => {
         address: "No address",
         emergencyContact: "No number",
         bio: "",
+        role: "user",
         createdAt: new Date(),
       };
 
