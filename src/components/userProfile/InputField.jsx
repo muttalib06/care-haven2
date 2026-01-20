@@ -1,4 +1,5 @@
 import { User, Mail, Phone, MapPin, Calendar } from "lucide-react";
+import { readonly } from "zod";
 
 const InputField = ({
   label,
@@ -9,6 +10,7 @@ const InputField = ({
   isEditing,
   iconType,
   displayValue,
+  readOnly
 }) => {
   const getIcon = () => {
     const icons = {
@@ -33,6 +35,7 @@ const InputField = ({
           name={name}
           value={value || ""}
           onChange={onChange}
+          readOnly={readonly}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3490c5] focus:border-transparent"
         />
       ) : (

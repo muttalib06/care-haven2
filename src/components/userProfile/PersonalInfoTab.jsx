@@ -61,9 +61,9 @@ const PersonalInfoTab = ({
             label="Email Address"
             name="email"
             type="email"
+            readOnly={true}
             value={loggedInUser?.email}
             onChange={handleInputChange}
-            isEditing={isEditing}
             iconType="mail"
           />
 
