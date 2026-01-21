@@ -1,8 +1,10 @@
+"use client"
 import { getIcon } from "@/utils/icons";
+import Link from "next/link";
 
 export default function HowItWorks({ steps }) {
   return (
-    <section className="py-16 lg:py-24 bg-white">
+    <section id="how-it-works" className="scroll-mt-10 py-16 lg:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -91,9 +93,9 @@ export default function HowItWorks({ steps }) {
 
         {/* CTA */}
         <div className="mt-12 text-center">
-          <button className="bg-[#3490c5] text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#2d7db3] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
+          <Link href={"/signup"} className="bg-[#3490c5] text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#2d7db3] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
             Get Started Now
-          </button>
+          </Link>
         </div>
       </div>
     </section>

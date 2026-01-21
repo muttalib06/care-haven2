@@ -91,7 +91,7 @@ export default function Banner() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp">
                 <Link
-                  href={"/caregivers"}
+                  href={"/signup"}
                   className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
                   style={{ backgroundColor: "#3490c5" }}
                 >

@@ -1,5 +1,7 @@
+"use client"
 import React from "react";
 import { Search, Shield, Calendar, Heart } from "lucide-react";
+import Link from "next/link";
 
 export default function HowItWorks() {
   const steps = [
@@ -187,12 +189,12 @@ export default function HowItWorks() {
 
         {/* Call to Action */}
         <div className="text-center mt-16">
-          <button
+          <Link href={"/signup"}
             className="px-8 py-4 text-lg font-semibold text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             style={{ backgroundColor: "#3490c5" }}
           >
             Get Started Today
-          </button>
+          </Link>
           <p className="mt-4 text-gray-600">
             Join thousands of families who trust CareHaven
           </p>

@@ -15,7 +15,7 @@ export default function ServiceOverview({
               About Our Baby Care Services
             </h2>
 
-            <div className="prose prose-lg max-w-none">
+            <div id="detail" className="scroll-mt-35 prose prose-lg max-w-none">
               {paragraphs.map((paragraph, index) => (
                 <p key={index} className="text-gray-700 mb-6 leading-relaxed">
                   {paragraph}

@@ -1,3 +1,6 @@
+"use client"
+import Link from "next/link";
+
 export default function CTASection({ title, ctaText }) {
   return (
     <section className="py-16 lg:py-24 bg-gradient-to-br from-[#3490c5] via-[#2d7db3] to-[#236b96] relative overflow-hidden">
@@ -50,12 +53,12 @@ export default function CTASection({ title, ctaText }) {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button className="bg-white text-[#3490c5] px-10 py-5 rounded-lg font-bold text-lg hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 transform">
+            <Link href={"/caregivers"} className="bg-white text-[#3490c5] px-10 py-5 rounded-lg font-bold text-lg hover:bg-blue-50 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 transform">
               {ctaText}
-            </button>
-            <button className="bg-transparent border-2 border-white text-white px-10 py-5 rounded-lg font-bold text-lg hover:bg-white/10 transition-all duration-300">
+            </Link>
+            <a href="#how-it-works" className="bg-transparent border-2 border-white text-white px-10 py-5 rounded-lg font-bold text-lg hover:bg-white/10 transition-all duration-300">
               See How It Works
-            </button>
+            </a>
           </div>
 
           {/* Trust Indicators */}
