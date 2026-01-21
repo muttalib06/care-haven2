@@ -1,0 +1,620 @@
+[
+  {
+    "id": "baby-care",
+    "title": "Professional Baby Care Services",
+    "slug": "baby-care",
+    "shortDescription": "Trusted, certified caregivers providing loving care for infants and toddlers in the comfort of your home.",
+    "hero": {
+      "image": "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=1200&h=600&fit=crop",
+      "headline": "Loving, Certified Care for Your Little Ones",
+      "subheadline": "Professional babysitters and nannies who treat your child like their own",
+      "ctaText": "Find a Baby Caregiver",
+      "trustBadge": "500+ Certified Baby Care Specialists"
+    },
+    "description": "Welcome to CareHaven's Baby Care Services, where your child's safety, development, and happiness are our top priorities. We understand that choosing someone to care for your baby is one of the most important decisions you'll make as a parent. That's why we've built a network of thoroughly vetted, experienced, and passionate caregivers who specialize in infant and toddler care.\n\nOur baby care professionals are more than just babysitters—they're trained specialists who understand child development, nutrition, and age-appropriate activities. Each caregiver undergoes rigorous background checks, CPR and First Aid certification, and completes our comprehensive training program covering newborn care, feeding techniques, sleep routines, and emergency response.\n\nWhether you need care for a few hours, regular daily support, or overnight assistance, our caregivers adapt to your family's unique needs and routines. They provide engaging, educational activities that promote cognitive and physical development while ensuring your little one feels safe, loved, and stimulated. From newborns requiring gentle care to energetic toddlers needing creative play, we match you with caregivers experienced in your child's specific age group.\n\nWe believe in transparency and communication. Through our platform, you'll receive real-time updates, photos, and daily reports about your child's activities, meals, naps, and milestones. Parents can track everything from diaper changes to developmental progress, giving you peace of mind while you're away.\n\nOur baby care services include feeding and bottle preparation, diaper changing, bathing and hygiene, sleep routine management, age-appropriate play and learning activities, outdoor time and exercise, developmental milestone tracking, and basic household tasks related to baby care. We also offer specialized services for twins, multiples, and babies with special dietary or medical needs.\n\nWith flexible scheduling options—including last-minute bookings, recurring care, and overnight support—CareHaven makes it easy to find reliable help whenever you need it. Join thousands of families who trust us with their most precious responsibility. Your baby deserves the best care, and we're here to deliver it.",
+    "serviceHighlights": [
+      "CPR & First Aid Certified Caregivers",
+      "Background Checked & Reference Verified",
+      "Real-time Updates & Daily Reports",
+      "Flexible Scheduling (Hourly to Full-time)",
+      "Newborn to Toddler Specialists",
+      "Developmental Activity Planning",
+      "24/7 Customer Support",
+      "Satisfaction Guaranteed"
+    ],
+    "servicesIncluded": [
+      "Feeding & bottle preparation",
+      "Diaper changing & potty training",
+      "Bathing & hygiene care",
+      "Sleep routine management",
+      "Age-appropriate play activities",
+      "Educational games & learning",
+      "Outdoor activities & exercise",
+      "Meal preparation for toddlers",
+      "Light housekeeping (baby-related)",
+      "Developmental milestone tracking"
+    ],
+    "targetAudience": {
+      "ageRange": "Newborn to 5 years",
+      "idealFor": [
+        "Working parents needing daily care",
+        "Parents seeking occasional date nights",
+        "Families needing overnight support",
+        "Parents of multiples (twins, triplets)",
+        "New parents needing guidance"
+      ]
+    },
+    "qualifications": [
+      {
+        "title": "Background Checks",
+        "description": "National criminal background screening and sex offender registry check"
+      },
+      {
+        "title": "CPR & First Aid",
+        "description": "Pediatric CPR and First Aid certification (renewed annually)"
+      },
+      {
+        "title": "Experience Verification",
+        "description": "Minimum 2 years childcare experience with verified references"
+      },
+      {
+        "title": "Specialized Training",
+        "description": "Completion of newborn care, child development, and safety training"
+      },
+      {
+        "title": "Ongoing Education",
+        "description": "Regular workshops on child psychology, nutrition, and best practices"
+      }
+    ],
+    "howItWorks": [
+      {
+        "step": 1,
+        "title": "Tell Us Your Needs",
+        "description": "Complete a simple form about your child's age, care requirements, and schedule",
+        "icon": "clipboard"
+      },
+      {
+        "step": 2,
+        "title": "Browse Matched Caregivers",
+        "description": "Review profiles of qualified caregivers matched to your specific needs",
+        "icon": "users"
+      },
+      {
+        "step": 3,
+        "title": "Interview & Select",
+        "description": "Message, video chat, or meet candidates before making your choice",
+        "icon": "video"
+      },
+      {
+        "step": 4,
+        "title": "Book & Manage",
+        "description": "Schedule care, receive updates, and communicate through our secure platform",
+        "icon": "calendar"
+      }
+    ],
+    "pricing": {
+      "currency": "USD",
+      "startingPrice": 18,
+      "pricingTiers": [
+        {
+          "name": "Hourly Care",
+          "price": "$18-25/hour",
+          "description": "Perfect for occasional needs and date nights",
+          "features": [
+            "Minimum 3-hour booking",
+            "Same-day availability",
+            "Real-time updates",
+            "Flexible cancellation"
+          ]
+        },
+        {
+          "name": "Part-Time Care",
+          "price": "$600-900/week",
+          "description": "Ideal for working parents needing regular support",
+          "features": [
+            "20-30 hours per week",
+            "Consistent caregiver",
+            "Weekly reports",
+            "Priority booking",
+            "10% discount on hourly rate"
+          ]
+        },
+        {
+          "name": "Full-Time Care",
+          "price": "$1,200-1,800/week",
+          "description": "Comprehensive care with dedicated nanny",
+          "features": [
+            "40+ hours per week",
+            "Dedicated caregiver",
+            "Detailed daily logs",
+            "Backup caregiver included",
+            "15% discount on hourly rate",
+            "Customized care plan"
+          ]
+        }
+      ],
+      "additionalInfo": "Prices vary based on location, experience level, and number of children. No hidden fees."
+    },
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Sarah Johnson",
+        "location": "Austin, TX",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+        "text": "Finding Maria through CareHaven was a lifesaver! She's incredible with our 6-month-old twins. The daily updates give me peace of mind while I'm at work.",
+        "date": "2024-12-10",
+        "verified": true
+      },
+      {
+        "id": 2,
+        "name": "Michael Chen",
+        "location": "Seattle, WA",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
+        "text": "As a single dad, I needed reliable help with my toddler. CareHaven connected me with Jessica who has been amazing. Highly recommend!",
+        "date": "2024-11-22",
+        "verified": true
+      },
+      {
+        "id": 3,
+        "name": "Emily Rodriguez",
+        "location": "Miami, FL",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop",
+        "text": "The screening process gave me confidence, and our caregiver exceeded expectations. My daughter actually gets excited when she arrives!",
+        "date": "2024-10-15",
+        "verified": true
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What if my baby has special dietary needs or allergies?",
+        "answer": "All our caregivers are trained to handle special dietary requirements and allergies. During the matching process, you'll specify any restrictions, and we'll connect you with caregivers experienced in managing these needs. Caregivers follow your specific instructions and maintain detailed feeding logs."
+      },
+      {
+        "question": "Can I request the same caregiver for regular visits?",
+        "answer": "Absolutely! Many families prefer consistency. Once you find a caregiver you love, you can book them for recurring schedules. We also provide backup caregivers for times when your regular caregiver is unavailable."
+      },
+      {
+        "question": "What is your cancellation policy?",
+        "answer": "For hourly bookings, you can cancel up to 24 hours in advance for a full refund. Cancellations within 24 hours incur a 50% fee. For recurring care, we require 1 week's notice. We understand emergencies happen and handle them case-by-case."
+      },
+      {
+        "question": "How do you verify caregiver qualifications?",
+        "answer": "Every caregiver undergoes a comprehensive vetting process including national background checks, reference verification, identity verification, CPR/First Aid certification review, in-person interviews, and skills assessments. We also conduct ongoing random quality checks."
+      },
+      {
+        "question": "What happens in case of an emergency?",
+        "answer": "All caregivers are trained in emergency response and have immediate access to your emergency contacts and medical information. They're required to contact you and emergency services immediately when needed. Our 24/7 support team is also available to assist."
+      },
+      {
+        "question": "Do you offer overnight care?",
+        "answer": "Yes! We offer overnight care for parents who work night shifts, travel, or simply need a good night's sleep. Overnight caregivers are experienced in managing nighttime routines, feeding, and sleep training."
+      }
+    ],
+    "stats": {
+      "totalCaregivers": "500+",
+      "averageRating": 4.9,
+      "familiesServed": "10,000+",
+      "hoursOfCare": "250,000+"
+    }
+  },
+  {
+    "id": "elderly-care",
+    "title": "Compassionate Elderly Care Services",
+    "slug": "elderly-care",
+    "shortDescription": "Dignified, professional care for seniors by trained caregivers who provide companionship, assistance, and medical support.",
+    "hero": {
+      "image": "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=1200&h=600&fit=crop",
+      "headline": "Dignified Care for Your Loved Ones",
+      "subheadline": "Compassionate senior care specialists dedicated to comfort, independence, and quality of life",
+      "ctaText": "Find an Elderly Caregiver",
+      "trustBadge": "800+ Certified Senior Care Professionals"
+    },
+    "description": "At CareHaven, we believe every senior deserves to age with dignity, comfort, and independence. Our Elderly Care Services connect families with compassionate, highly trained caregivers who specialize in senior care, providing everything from companionship to medical assistance in the familiar surroundings of home.\n\nAging comes with unique challenges, and finding the right care can feel overwhelming. Whether your loved one needs help with daily activities, companionship to combat loneliness, medication management, or specialized care for conditions like dementia or Parkinson's, we're here to help. Our caregivers are not just healthcare workers—they're dedicated professionals who treat every senior with the respect, patience, and kindness they deserve.\n\nEach caregiver in our network undergoes extensive training in senior care best practices, including mobility assistance, fall prevention, dementia care, medication management, and chronic disease support. They're background-checked, reference-verified, and certified in CPR, First Aid, and specialized senior care techniques. Many hold certifications as Certified Nursing Assistants (CNAs) or Home Health Aides (HHAs), bringing medical expertise to non-clinical home settings.\n\nWe understand that every senior has unique needs, preferences, and routines. Our matching process considers personality compatibility, cultural preferences, language needs, and specific care requirements to ensure the perfect fit. Caregivers assist with activities of daily living (ADLs) including bathing, dressing, grooming, toileting, and mobility. They also provide instrumental support like meal preparation, light housekeeping, medication reminders, transportation to appointments, and engaging companionship.\n\nBeyond physical care, our caregivers focus on emotional well-being. They engage seniors in meaningful activities, stimulating conversation, hobbies, and social interaction to combat isolation and depression. Whether it's playing cards, going for walks, working on puzzles, or simply sharing stories, our caregivers become trusted companions.\n\nFamily members receive regular updates through our platform, including care logs, health observations, medication tracking, and activity reports. Video check-ins and secure messaging keep you connected even when you can't be there in person. We offer flexible care options from a few hours weekly to 24/7 live-in support.\n\nWith CareHaven, you gain peace of mind knowing your loved one receives personalized, professional care that promotes independence, preserves dignity, and enhances quality of life. Join thousands of families who trust us to care for their most cherished family members.",
+    "serviceHighlights": [
+      "CNA & HHA Certified Caregivers Available",
+      "Dementia & Alzheimer's Care Specialists",
+      "Medication Management & Monitoring",
+      "24/7 Live-in Care Options",
+      "Transportation to Appointments",
+      "Specialized Chronic Disease Support",
+      "Fall Prevention & Mobility Assistance",
+      "Respite Care for Family Caregivers"
+    ],
+    "servicesIncluded": [
+      "Personal care (bathing, dressing, grooming)",
+      "Mobility assistance & fall prevention",
+      "Medication reminders & management",
+      "Meal planning & preparation",
+      "Light housekeeping & laundry",
+      "Transportation & errand running",
+      "Companionship & social engagement",
+      "Health monitoring & reporting",
+      "Dementia & memory care",
+      "Post-hospital recovery support",
+      "Chronic disease management",
+      "End-of-life comfort care"
+    ],
+    "targetAudience": {
+      "ageRange": "60+ years",
+      "idealFor": [
+        "Seniors needing daily living assistance",
+        "Individuals with dementia or Alzheimer's",
+        "Post-surgery or hospital recovery",
+        "Seniors living alone requiring companionship",
+        "Families needing respite care",
+        "Individuals with chronic conditions"
+      ]
+    },
+    "qualifications": [
+      {
+        "title": "Medical Certifications",
+        "description": "CNA, HHA, or equivalent healthcare certifications with current licensure"
+      },
+      {
+        "title": "Background Screening",
+        "description": "FBI fingerprint clearance and comprehensive criminal background checks"
+      },
+      {
+        "title": "Senior Care Training",
+        "description": "Specialized training in dementia care, fall prevention, and age-related conditions"
+      },
+      {
+        "title": "CPR & First Aid",
+        "description": "Adult CPR, AED, and First Aid certification (updated every 2 years)"
+      },
+      {
+        "title": "Experience Verification",
+        "description": "Minimum 3 years senior care experience with professional references"
+      }
+    ],
+    "howItWorks": [
+      {
+        "step": 1,
+        "title": "Care Assessment",
+        "description": "Complete a detailed assessment of your loved one's needs, preferences, and medical conditions",
+        "icon": "clipboard"
+      },
+      {
+        "step": 2,
+        "title": "Caregiver Matching",
+        "description": "We match you with qualified caregivers based on skills, experience, and compatibility",
+        "icon": "users"
+      },
+      {
+        "step": 3,
+        "title": "Meet & Greet",
+        "description": "Schedule meetings with potential caregivers to find the perfect fit for your family",
+        "icon": "handshake"
+      },
+      {
+        "step": 4,
+        "title": "Begin Care",
+        "description": "Start care with ongoing monitoring, updates, and support from our team",
+        "icon": "heart"
+      }
+    ],
+    "pricing": {
+      "currency": "USD",
+      "startingPrice": 22,
+      "pricingTiers": [
+        {
+          "name": "Companion Care",
+          "price": "$22-28/hour",
+          "description": "Non-medical support and companionship",
+          "features": [
+            "Minimum 4-hour shifts",
+            "Social engagement activities",
+            "Light meal preparation",
+            "Medication reminders",
+            "Transportation assistance"
+          ]
+        },
+        {
+          "name": "Personal Care",
+          "price": "$28-35/hour",
+          "description": "Assistance with daily living activities",
+          "features": [
+            "All companion care services",
+            "Bathing & grooming assistance",
+            "Mobility & transfer support",
+            "Incontinence care",
+            "CNA/HHA certified caregivers",
+            "Detailed care reporting"
+          ]
+        },
+        {
+          "name": "24/7 Live-In Care",
+          "price": "$250-350/day",
+          "description": "Round-the-clock care and supervision",
+          "features": [
+            "All personal care services",
+            "Overnight supervision",
+            "Emergency response",
+            "Meal planning & preparation",
+            "Housekeeping included",
+            "Dedicated care coordinator",
+            "Weekly family consultations"
+          ]
+        }
+      ],
+      "additionalInfo": "Specialized care (dementia, Parkinson's) may have additional costs. Medicare and long-term care insurance accepted."
+    },
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Robert Williams",
+        "location": "Portland, OR",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
+        "text": "Margaret has been caring for my 87-year-old mother for 6 months. She's patient, kind, and genuinely cares. Mom looks forward to her visits every day!",
+        "date": "2024-11-30",
+        "verified": true
+      },
+      {
+        "id": 2,
+        "name": "Linda Patterson",
+        "location": "Boston, MA",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop",
+        "text": "After Dad's stroke, we needed help fast. CareHaven found us a wonderful caregiver within 48 hours. The platform makes communication so easy.",
+        "date": "2024-12-05",
+        "verified": true
+      },
+      {
+        "id": 3,
+        "name": "David Kumar",
+        "location": "San Diego, CA",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop",
+        "text": "My grandfather has dementia, and his caregiver is specially trained for memory care. The difference in his mood and engagement has been remarkable.",
+        "date": "2024-10-28",
+        "verified": true
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do your caregivers have medical training?",
+        "answer": "Many of our caregivers are Certified Nursing Assistants (CNAs) or Home Health Aides (HHAs) with medical training. We match caregivers to your needs—if medical care is required, we'll connect you with appropriately certified professionals. All caregivers are trained in basic health monitoring and emergency response."
+      },
+      {
+        "question": "Can caregivers help with dementia and Alzheimer's care?",
+        "answer": "Yes! We have caregivers specially trained in dementia and Alzheimer's care. They understand memory care techniques, behavioral management, safety protocols, and how to provide compassionate support for cognitive decline. We match families with caregivers experienced in their loved one's specific condition."
+      },
+      {
+        "question": "What if my loved one needs care overnight?",
+        "answer": "We offer overnight care and 24/7 live-in options. Overnight caregivers provide supervision, assist with nighttime bathroom needs, ensure safety, and handle any emergencies. Live-in caregivers stay in your home and provide round-the-clock support."
+      },
+      {
+        "question": "How do you handle medication management?",
+        "answer": "Caregivers can provide medication reminders and help organize medications. Certified caregivers (CNAs/HHAs) may administer medications according to state regulations and physician orders. We maintain detailed medication logs accessible to family members and healthcare providers."
+      },
+      {
+        "question": "What is respite care?",
+        "answer": "Respite care gives family caregivers a break while ensuring their loved one continues receiving quality care. Whether you need a few hours, a weekend, or a week away, we provide temporary care so you can rest, travel, or handle other responsibilities without worry."
+      },
+      {
+        "question": "Do you accept insurance or Medicare?",
+        "answer": "We accept long-term care insurance and work with many insurance providers. While Medicare typically doesn't cover non-medical home care, Medicare Advantage plans sometimes do. We can help verify your coverage and provide necessary documentation for reimbursement."
+      }
+    ],
+    "stats": {
+      "totalCaregivers": "800+",
+      "averageRating": 4.9,
+      "familiesServed": "15,000+",
+      "hoursOfCare": "500,000+"
+    }
+  },
+  {
+    "id": "sick-care",
+    "title": "Professional Sick Care Services",
+    "slug": "sick-care",
+    "shortDescription": "Compassionate medical care and support for individuals recovering from illness, surgery, or managing chronic conditions at home.",
+    "hero": {
+      "image": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1200&h=600&fit=crop",
+      "headline": "Expert Care During Recovery & Illness",
+      "subheadline": "Professional medical support for healing, comfort, and peace of mind at home",
+      "ctaText": "Find a Medical Caregiver",
+      "trustBadge": "700+ Certified Medical Care Professionals"
+    },
+    "description": "At CareHaven, we understand that illness and recovery are challenging times that require not just medical expertise, but also compassion, patience, and personalized attention. Our Sick Care Services connect you with qualified healthcare professionals who provide comprehensive medical support and personal care for individuals recovering from surgery, managing chronic illnesses, or dealing with acute medical conditions in the comfort of home.\n\nWhether you're recovering from a major surgery, managing a chronic condition like diabetes or heart disease, dealing with cancer treatment, or need post-hospitalization care, our caregivers bring hospital-quality care to your home. They're trained medical professionals—many holding certifications as Registered Nurses (RNs), Licensed Practical Nurses (LPNs), Certified Nursing Assistants (CNAs), or Home Health Aides (HHAs)—who understand the medical and emotional complexities of illness and recovery.\n\nOur caregivers provide a comprehensive range of medical services including medication management and administration, wound care and dressing changes, vital signs monitoring, IV therapy and injections, catheter and colostomy care, pain management support, post-surgical care, physical therapy assistance, and coordination with your medical team. They work directly with your physicians, following care plans precisely while monitoring for complications and reporting changes in condition.\n\nBeyond medical tasks, our caregivers understand that recovery involves the whole person. They assist with daily living activities that may be challenging during illness—bathing, dressing, mobility, meal preparation tailored to dietary restrictions, and medication reminders. They provide emotional support, encouragement, and companionship during what can be isolating and difficult times.\n\nWe recognize that each illness and recovery journey is unique. Our assessment process considers your medical condition, treatment plan, mobility limitations, dietary needs, medication schedule, and personal preferences. We match you with caregivers who have specific experience with your condition—whether that's cardiac care, diabetes management, cancer support, respiratory conditions, or post-operative recovery.\n\nFamily members stay informed through our platform with detailed care logs, vital sign tracking, medication records, symptom reports, and direct communication with caregivers. Video updates and secure messaging ensure you're always connected to your loved one's care, even when you can't be physically present.\n\nOur flexible service options accommodate every stage of recovery, from intensive post-hospital care requiring round-the-clock monitoring to part-time assistance as you regain independence. We provide short-term recovery support, long-term chronic disease management, palliative care, and respite care for family caregivers who need a break.\n\nWith CareHaven's Sick Care Services, you receive professional medical expertise combined with genuine compassion, enabling faster recovery, better health outcomes, and the comfort of healing at home. Trust us to provide the skilled care you need during life's most vulnerable moments.",
+    "serviceHighlights": [
+      "RN, LPN & CNA Certified Medical Staff",
+      "Post-Surgical & Hospital Discharge Care",
+      "Chronic Disease Management",
+      "Medication Administration & IV Therapy",
+      "Wound Care & Medical Equipment",
+      "24/7 Medical Monitoring Available",
+      "Coordination with Healthcare Team",
+      "Palliative & End-of-Life Care"
+    ],
+    "servicesIncluded": [
+      "Medication management & administration",
+      "Vital signs monitoring (BP, pulse, temperature)",
+      "Wound care & dressing changes",
+      "IV therapy & injections",
+      "Catheter & ostomy care",
+      "Pain management support",
+      "Physical therapy assistance",
+      "Diabetes care & glucose monitoring",
+      "Respiratory care & oxygen management",
+      "Post-surgical recovery support",
+      "Nutrition & meal planning",
+      "Personal care & hygiene assistance",
+      "Medical equipment management",
+      "Doctor appointment coordination"
+    ],
+    "targetAudience": {
+      "ageRange": "All ages",
+      "idealFor": [
+        "Post-surgery recovery patients",
+        "Individuals with chronic illnesses",
+        "Cancer patients undergoing treatment",
+        "Cardiac care and stroke recovery",
+        "Diabetes and respiratory condition management",
+        "Hospital discharge transitions",
+        "Palliative and hospice care needs"
+      ]
+    },
+    "qualifications": [
+      {
+        "title": "Medical Certifications",
+        "description": "RN, LPN, CNA, or HHA licenses with current state certification and medical training"
+      },
+      {
+        "title": "Specialized Training",
+        "description": "Disease-specific training in diabetes, cardiac care, wound management, and other conditions"
+      },
+      {
+        "title": "Background Screening",
+        "description": "Enhanced medical background checks and professional license verification"
+      },
+      {
+        "title": "Emergency Response",
+        "description": "Advanced CPR, First Aid, and emergency medical response certification"
+      },
+      {
+        "title": "Continuing Education",
+        "description": "Ongoing training in new treatments, medical equipment, and best practices"
+      }
+    ],
+    "howItWorks": [
+      {
+        "step": 1,
+        "title": "Medical Assessment",
+        "description": "Complete evaluation of medical condition, treatment plan, and care requirements",
+        "icon": "clipboard"
+      },
+      {
+        "step": 2,
+        "title": "Caregiver Matching",
+        "description": "Connect with medical professionals experienced in your specific condition",
+        "icon": "users"
+      },
+      {
+        "step": 3,
+        "title": "Care Plan Creation",
+        "description": "Develop detailed care plan in coordination with your healthcare team",
+        "icon": "filetext"
+      },
+      {
+        "step": 4,
+        "title": "Begin Care",
+        "description": "Start professional care with continuous monitoring and regular updates",
+        "icon": "heart"
+      }
+    ],
+    "pricing": {
+      "currency": "USD",
+      "startingPrice": 28,
+      "pricingTiers": [
+        {
+          "name": "Basic Medical Care",
+          "price": "$28-38/hour",
+          "description": "Essential medical support and monitoring",
+          "features": [
+            "Minimum 4-hour shifts",
+            "Medication management",
+            "Vital signs monitoring",
+            "Basic wound care",
+            "CNA/HHA certified caregivers"
+          ]
+        },
+        {
+          "name": "Advanced Medical Care",
+          "price": "$45-60/hour",
+          "description": "Comprehensive skilled nursing services",
+          "features": [
+            "All basic care services",
+            "IV therapy & injections",
+            "Complex wound care",
+            "Medical equipment management",
+            "RN/LPN certified nurses",
+            "Detailed medical documentation"
+          ]
+        },
+        {
+          "name": "24/7 Medical Care",
+          "price": "$400-600/day",
+          "description": "Round-the-clock skilled nursing supervision",
+          "features": [
+            "All advanced care services",
+            "Continuous medical monitoring",
+            "Emergency response capability",
+            "Coordination with medical team",
+            "Dedicated care coordinator",
+            "Family consultation & training",
+            "Comprehensive care reports"
+          ]
+        }
+      ],
+      "additionalInfo": "Pricing varies by medical complexity and certification level. Many services covered by Medicare, Medicaid, and private insurance."
+    },
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Patricia Collins",
+        "location": "Houston, TX",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+        "text": "After my husband's heart surgery, we needed skilled nursing at home. Our caregiver was phenomenal—professional, caring, and gave us confidence during recovery.",
+        "date": "2024-12-08",
+        "verified": true
+      },
+      {
+        "id": 2,
+        "name": "James Thompson",
+        "location": "Atlanta, GA",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop",
+        "text": "Managing my mother's diabetes was overwhelming until CareHaven connected us with an experienced RN. The glucose monitoring and meal planning have been life-changing.",
+        "date": "2024-11-25",
+        "verified": true
+      },
+      {
+        "id": 3,
+        "name": "Angela Kim",
+        "location": "Los Angeles, CA",
+        "rating": 5,
+        "image": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop",
+        "text": "During my cancer treatment, having a compassionate caregiver who understood my needs made all the difference. They coordinated everything with my oncologist perfectly.",
+        "date": "2024-10-12",
+        "verified": true
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What medical services can your caregivers provide?",
+        "answer": "Our caregivers provide a wide range of medical services based on their certification level. RNs and LPNs can administer medications, IV therapy, injections, wound care, catheter management, and complex medical procedures. CNAs and HHAs provide vital signs monitoring, medication reminders, basic wound care, and personal care. All services are provided according to your doctor's orders and state regulations."
+      },
+      {
+        "question": "How do caregivers coordinate with my medical team?",
+        "answer": "Our caregivers work as an extension of your healthcare team. They communicate regularly with your physicians, follow prescribed care plans precisely, report changes in condition, accompany you to appointments when needed, and maintain detailed medical records accessible to your healthcare providers. We ensure seamless coordination for optimal care."
+      },
+      {
+        "question": "Can caregivers help with post-surgery recovery?",
+        "answer": "Absolutely! We specialize in post-surgical care including wound monitoring, pain management, mobility assistance, physical therapy exercises, medication management, and monitoring for complications. Our caregivers follow your surgeon's discharge instructions precisely and help ensure a smooth, safe recovery at home."
+      },
+      {
+        "question": "Do you provide care for chronic conditions?",
+        "answer": "Yes! We have extensive experience managing chronic conditions including diabetes, heart disease, COPD, kidney disease, Parkinson's, MS, and more. Our caregivers provide ongoing monitoring, medication management, symptom tracking, lifestyle support, and work with your medical team to maintain stability and prevent complications."
+      },
+      {
+        "question": "Is your service covered by insurance?",
+        "answer": "Many of our medical services are covered by Medicare, Medicaid, and private insurance, especially when ordered by a physician as medically necessary. We're experienced in insurance billing and can help verify your coverage, obtain necessary authorizations, and submit claims. We'll work with you to maximize your benefits."
+      },
+      {
+        "question": "What happens in a medical emergency?",
+        "answer": "All our caregivers are trained in emergency response and have immediate access to your medical information and emergency contacts. They're authorized to call 911 when necessary and will accompany you to the hospital if needed. For 24/7 care, caregivers can handle many urgent situations at home under physician guidance, preventing unnecessary ER visits."
+      }
+    ],
+    "stats": {
+      "totalCaregivers": "700+",
+      "averageRating": 4.9,
+      "familiesServed": "12,000+",
+      "hoursOfCare": "400,000+"
+    }
+  }
+]

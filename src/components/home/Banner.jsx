@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Banner() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -89,15 +90,15 @@ export default function Banner() {
                 {slide.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp">
-                <button
+                <Link href={"/caregivers"}
                   className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
                   style={{ backgroundColor: "#3490c5" }}
                 >
                   Get Started
-                </button>
-                <button className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white border-2 border-white rounded-lg transition-all duration-300 hover:bg-white hover:text-gray-900">
+                </Link>
+                <Link href={"aboutUs"} className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white border-2 border-white rounded-lg transition-all duration-300 hover:bg-white hover:text-gray-900">
                   Learn More
-                </button>
+                </Link>
               </div>
             </div>
           </div>

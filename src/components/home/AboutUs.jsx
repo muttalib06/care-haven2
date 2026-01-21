@@ -4,6 +4,7 @@ import { Heart, Shield, Users, Clock } from "lucide-react";
 import Image from "next/image";
 import Count from "@/components/sharedComponents/Count";
 import { useInView } from "framer-motion";
+import Link from "next/link";
 
 export default function AboutUs() {
   const sectionRef = useRef(null);
@@ -84,12 +85,12 @@ export default function AboutUs() {
               empowering caretakers to build meaningful careers in the
               caregiving profession.
             </p>
-            <button
+            <Link href={"aboutUs"}
               className="px-8 py-3 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               style={{ backgroundColor: "#3490c5" }}
             >
               Learn More About Us
-            </button>
+            </Link>
           </div>
 
           {/* Right Side - Image Placeholder */}

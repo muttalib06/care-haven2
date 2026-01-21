@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Shield, Heart } from "lucide-react";
+import Link from "next/link";
 
 const CallToAction = () => {
   return (
@@ -95,9 +96,9 @@ const CallToAction = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/20 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </button>
 
-            <button className="group w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-foreground/20 bg-white/80 backdrop-blur-sm px-8 py-4 text-base font-semibold text-foreground shadow-lg transition-all duration-300 hover:bg-white hover:border-primary hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <Link href={"/caregivers"} className="group w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-foreground/20 bg-white/80 backdrop-blur-sm px-8 py-4 text-base font-semibold text-foreground shadow-lg transition-all duration-300 hover:bg-white hover:border-primary hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
               Browse Caregivers
-            </button>
+            </Link>
           </motion.div>
 
           {/* Trust indicators */}

@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -56,9 +57,9 @@ const Hero = () => {
             className="mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 px-4"
           >
            
-            <button className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-foreground/20 bg-white/90 backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-medium text-foreground shadow-md transition-all hover:bg-white hover:border-primary focus:outline-none ">
+            <Link href={"/caregivers"} className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-foreground/20 bg-white/90 backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-medium text-foreground shadow-md transition-all hover:bg-white hover:border-primary focus:outline-none ">
               Find Caregivers
-            </button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>
