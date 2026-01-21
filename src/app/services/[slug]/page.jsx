@@ -7,32 +7,35 @@ import PricingSection from "@/components/services/PricingSection";
 import Testimonials from "@/components/services/Testimonials";
 import FAQSection from "@/components/services/FAQSection";
 import CTASection from "@/components/services/CTASection";
-import serviceData from "@/data/services/baby-care.json";
+// import serviceData from "@/data/services/baby-care.json";
+import { getServiceDetail } from "@/data-handling/getServiceDetail";
 
-export default function ServiceDetailPage({ params }) {
-  const { slug } = params;
+export default async function ServiceDetailPage({ params }) {
+  const { slug } = await params;
+  //   console.log(slug);
 
   // In a real application, you would fetch data based on the slug
   // For now, we're using the imported data directly
-  const service = serviceData;
+  const response = await getServiceDetail(slug);
+  const service = response?.data;
 
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <ServiceHero hero={service.hero} title={service.title} />
+      <ServiceHero hero={service?.hero} title={service?.title} />
 
       {/* Service Highlights */}
-      <ServiceHighlights highlights={service.serviceHighlights} />
+      <ServiceHighlights highlights={service?.serviceHighlights} />
 
       {/* Service Overview */}
       <ServiceOverview
-        description={service.description}
-        targetAudience={service.targetAudience}
-        servicesIncluded={service.servicesIncluded}
+        description={service?.description}
+        targetAudience={service?.targetAudience}
+        servicesIncluded={service?.servicesIncluded}
       />
 
       {/* How It Works */}
-      <HowItWorks steps={service.howItWorks} />
+      <HowItWorks steps={service?.howItWorks} />
 
       {/* Qualifications */}
       <Qualifications qualifications={service.qualifications} />
@@ -50,19 +53,4 @@ export default function ServiceDetailPage({ params }) {
       <CTASection title={service.title} ctaText={service.hero.ctaText} />
     </main>
   );
-}
-
-// Generate metadata for SEO
-export async function generateMetadata({ params }) {
-  const service = serviceData;
-
-  return {
-    title: `${service.title} | CareHaven`,
-    description: service.shortDescription,
-    openGraph: {
-      title: service.title,
-      description: service.shortDescription,
-      images: [service.hero.image],
-    },
-  };
 }

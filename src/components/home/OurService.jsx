@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function OurService() {
   const services = [
     {
-      id: "baby-care-001",
+      id: "baby-care",
       icon: <Baby className="w-8 h-8 md:w-10 md:h-10" />,
       title: "Baby Care",
       description:
@@ -18,7 +18,7 @@ export default function OurService() {
       ],
     },
     {
-      id: "elderly-care-002",
+      id: "elderly-care",
       icon: <Heart className="w-8 h-8 md:w-10 md:h-10" />,
       title: "Elderly Service",
       description:
@@ -26,7 +26,7 @@ export default function OurService() {
       features: ["24/7 Support", "Medical Assistance", "Personalized Care"],
     },
     {
-      id: "sick-care-003",
+      id: "sick-care",
       icon: <Stethoscope className="w-8 h-8 md:w-10 md:h-10" />,
       title: "Sick People Service",
       description:
@@ -106,7 +106,7 @@ export default function OurService() {
               </ul>
 
               {/* Book Now Button */}
-              <Link href={`/serviceDetail/${service.id}`}>
+              <Link href={`/services/${service.id}`}>
                 <button
                   className="w-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white rounded-lg transition-all duration-300 hover:opacity-90 hover:shadow-lg"
                   style={{ backgroundColor: "#3490c5" }}
