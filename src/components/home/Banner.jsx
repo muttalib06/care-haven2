@@ -15,7 +15,7 @@ export default function Banner() {
       description:
         "Find verified and compassionate caretakers for children, elderly, and family members. Your peace of mind is our priority.",
       image:
-        "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1200&h=600&fit=crop",
+        "https://plus.unsplash.com/premium_photo-1664301910119-e5ab3d8b4c43?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Caretaker with elderly person",
     },
     {
@@ -24,7 +24,7 @@ export default function Banner() {
       description:
         "Expert babysitters and nannies ready to provide safe, nurturing care for your children. Book with confidence, anytime.",
       image:
-        "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200&h=600&fit=crop",
+        "https://plus.unsplash.com/premium_photo-1682000607519-5dfbe2f416d4?q=80&w=1157&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Caretaker playing with children",
     },
     {
@@ -33,7 +33,7 @@ export default function Banner() {
       description:
         "Compassionate and trained professionals providing personalized care for seniors in the comfort of their own home.",
       image:
-        "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=1200&h=600&fit=crop",
+        "https://plus.unsplash.com/premium_photo-1681883920602-1383de1cd97d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       alt: "Elderly care at home",
     },
   ];
@@ -74,7 +74,7 @@ export default function Banner() {
               src={slide.image}
               alt={slide.alt}
               fill
-              className="w-full h-full object-cover"
+              className="w-full h-full bg-center object-cover"
             />
             {/* Overlay */}
             <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/50 to-black/30"></div>
@@ -90,13 +90,17 @@ export default function Banner() {
                 {slide.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp">
-                <Link href={"/caregivers"}
+                <Link
+                  href={"/caregivers"}
                   className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
                   style={{ backgroundColor: "#3490c5" }}
                 >
                   Get Started
                 </Link>
-                <Link href={"aboutUs"} className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white border-2 border-white rounded-lg transition-all duration-300 hover:bg-white hover:text-gray-900">
+                <Link
+                  href={"aboutUs"}
+                  className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold text-white border-2 border-white rounded-lg transition-all duration-300 hover:bg-white hover:text-gray-900"
+                >
                   Learn More
                 </Link>
               </div>

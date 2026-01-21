@@ -1,4 +1,6 @@
+"use client"
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ServiceHero({ hero, title }) {
   return (
@@ -43,9 +45,9 @@ export default function ServiceHero({ hero, title }) {
 
             {/* CTA Button */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-white text-[#3490c5] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform">
+              <Link href={"/caregivers"} className="bg-white text-[#3490c5] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 transform">
                 {hero.ctaText}
-              </button>
+              </Link>
               <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition-all duration-300">
                 Learn More
               </button>
