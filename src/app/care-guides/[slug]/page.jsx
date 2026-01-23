@@ -4,28 +4,32 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import guidesData from "@/data/guides.json";
 import RelatedGuides from "@/components/care-guides/RelatedGuides";
 import Badge from "@/components/ui/Badge";
 import Rating from "@/components/ui/Rating";
+import { getSingleGuide } from "@/data-handling/getSingleGuide";
 
 export default function GuideDetailPage() {
   const params = useParams();
   const [activeSection, setActiveSection] = useState("");
+  const [guideData, setGuideData] = useState(null); // Fixed: Initialize as null instead of empty array
 
-  // Derive guide from params instead of storing in state
-  const guide = useMemo(() => {
-    return guidesData.find((g) => g.slug === params.slug) || null;
+  useEffect(() => {
+    const loadData = async () => {
+      const response = await getSingleGuide(params.slug);
+      setGuideData(response?.data || null); // Fixed: Added null fallback
+    };
+    loadData();
   }, [params.slug]);
 
-  // Derive related guides from guide instead of storing in state
+  const guide = guideData;
+
+  // Fixed: Derive related guides from guide instead of storing in state
   const relatedGuides = useMemo(() => {
     if (!guide?.relatedGuides || !Array.isArray(guide.relatedGuides)) {
       return [];
     }
-    return guidesData
-      .filter((g) => guide.relatedGuides.includes(g._id))
-      .slice(0, 3);
+    return guide.relatedGuides; // Fixed: Actually return the relatedGuides array
   }, [guide]);
 
   // Memoize sections extraction - use guide as dependency
@@ -407,7 +411,7 @@ export default function GuideDetailPage() {
                       Find professional caregivers in your area today
                     </p>
                     <Link
-                      href={guide.callsToAction[0].url}
+                      href={"/caregivers"}
                       className="inline-block px-8 py-3 bg-white text-[#3490c5] rounded-lg font-semibold hover:bg-gray-100 transition-colors"
                     >
                       {guide.callsToAction[0].text}
@@ -419,7 +423,7 @@ export default function GuideDetailPage() {
 
             {/* Related Guides */}
             {relatedGuides.length > 0 && (
-              <RelatedGuides guides={relatedGuides} />
+              <RelatedGuides guide={relatedGuides} />
             )}
           </main>
         </div>

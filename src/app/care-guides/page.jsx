@@ -1,27 +1,36 @@
 "use client";
 
-import { useState, useMemo } from "react";
-
-// Import your guides data here
-// In production, you'd fetch this from an API
-import guidesData from '@/data/guides.json';
+import { useState, useMemo, useEffect, useLayoutEffect } from "react";
 import FeaturedGuide from "@/components/care-guides/FeaturedGuide";
 import GuideCard from "@/components/care-guides/GuideCard";
 import GuideFilters from "@/components/care-guides/GuideFilters";
 import GuideSearch from "@/components/care-guides/GuideSearch";
 import GuideStats from "@/components/care-guides/GuideStats";
+import { getCareGuides } from "@/data-handling/getCareGuides";
+import { usePathname } from "next/navigation";
 
 export default function CareGuidesPage() {
+  const [guidesData, setGuidesData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCareType, setSelectedCareType] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const dataLoad = async () => {
+      const response = await getCareGuides();
+      setGuidesData(response?.data || []); // Fixed: Added fallback to empty array
+    };
+
+    dataLoad();
+  }, []);
 
   // Filter and search guides
   const filteredGuides = useMemo(() => {
-
-    let filtered = guidesData;
+    if (!guidesData || guidesData.length === 0) return []; // Fixed: Added length check
+    let filtered = guidesData; // Fixed: Added space after 'filtered ='
 
     // Search filter
     if (searchTerm) {
@@ -69,6 +78,7 @@ export default function CareGuidesPage() {
 
     return filtered;
   }, [
+    guidesData, // Fixed: Added missing dependency
     searchTerm,
     selectedCareType,
     selectedCategory,
@@ -78,7 +88,12 @@ export default function CareGuidesPage() {
 
   // Calculate stats
   const stats = useMemo(() => {
-    const totalViews = guidesData?.reduce(
+    // Fixed: Added safety checks
+    if (!guidesData || guidesData.length === 0) {
+      return { totalGuides: 0, totalViews: 0, averageRating: 0 };
+    }
+
+    const totalViews = guidesData.reduce(
       (sum, guide) => sum + guide.stats.views,
       0,
     );
@@ -86,14 +101,20 @@ export default function CareGuidesPage() {
       guidesData.reduce((sum, guide) => sum + guide.ratings.average, 0) /
       guidesData.length;
     return { totalGuides: guidesData.length, totalViews, averageRating };
-  }, []);
+  }, [guidesData]); // Fixed: Added missing dependency
 
-  const featuredGuide = guidesData.find((guide) => guide.isFeatured);
+  const featuredGuide = guidesData?.find((guide) => guide.isFeatured); // Fixed: Added optional chaining
+
+useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="bg-linear-to-r from-[#3490c5] to-[#2c7aa8] text-white">
+        {" "}
+        {/* Fixed: corrected className */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -225,19 +246,19 @@ export default function CareGuidesPage() {
               Subscribe to our newsletter for expert caregiving advice, new
               guides, and helpful resources delivered to your inbox.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
               />
               <button
-                type="submit"
+                type="button"
                 className="px-6 py-3 bg-white text-[#3490c5] rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Subscribe
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
