@@ -4,7 +4,7 @@
 import { Search, MapPin, Heart, Menu } from "lucide-react";
 // import ServiceTypeDropdown from "./ServiceTypeDropdown";
 import QuickFilters from "./QuickFilters";
-import { RiFindReplaceLine } from "react-icons/ri";
+
 
 export default function SearchHeader({
   searchQuery,
@@ -30,10 +30,10 @@ export default function SearchHeader({
 
   return (
     <header
-      className="relative overflow-hidden"
+      className="relative overflow-hidden rounded-r-full mt-4"
       style={{
         backgroundImage:
-          'url("https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&q=80")',
+          'url("https://plus.unsplash.com/premium_photo-1723600962000-16f08340ea45?q=80&w=1204&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -65,7 +65,7 @@ export default function SearchHeader({
               {/* <h1 className="text-lg font-bold text-white leading-tight">
                 CareConnect
               </h1> */}
-              <RiFindReplaceLine  className="text-white"/>
+              {/* <RiFindReplaceLine className="text-white" /> */}
               <p className="text-[10px] text-white/80 leading-tight">
                 Find Your Perfect Caregiver
               </p>

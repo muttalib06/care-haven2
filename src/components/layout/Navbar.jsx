@@ -74,6 +74,14 @@ function Navbar(props) {
             >
               Find Caregivers
             </Link>
+
+            <Link
+              href={"/care-guides"}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
+            >
+             Care Guides
+            </Link>
+
             <Link
               href="/aboutUs"
               className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
@@ -151,24 +159,32 @@ function Navbar(props) {
         }`}
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-          <a
-            href="#home"
+          <Link
+            href={"/"}
             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
           >
             Home
-          </a>
-          <a
-            href="#services"
+          </Link>
+          <Link
+            href={"/caregivers"}
             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
           >
             Find Caregivers
-          </a>
-          <a
-            href="#about"
+          </Link>
+
+          <Link
+            href={"/resources"}
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
+          >
+            Resources
+          </Link>
+
+          <Link
+            href={"/aboutUs"}
             className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
           >
             About Us
-          </a>
+          </Link>
 
           {/* Mobile Avatar & Auth */}
           <div className="pt-4 pb-3 border-t border-gray-200">

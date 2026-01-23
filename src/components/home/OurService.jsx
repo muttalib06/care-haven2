@@ -141,7 +141,8 @@ export default function OurService() {
               >
                 Contact Us
               </button>
-              <Link
+              <Link 
+               href={"/caregivers"}
                 className="px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold rounded-lg transition-all duration-300 hover:bg-gray-100 border-2"
                 style={{ borderColor: "#3490c5", color: "#3490c5" }}
               >

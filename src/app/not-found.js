@@ -69,7 +69,7 @@ export default function NotFound() {
             </Link>
 
             <Link
-              href="/find-caregivers"
+              href="/caregivers"
               className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 sm:gap-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all duration-200 border-2 border-gray-200 hover:border-[#3490c5] shadow-sm hover:shadow-md"
             >
               <Search className="w-4 h-4 sm:w-5 sm:h-5" />
