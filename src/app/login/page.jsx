@@ -17,7 +17,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callback = searchParams.get("callback" || "/");
+  const callback = searchParams.get("callback") || "/";
 
   // helper function to handle error;
 

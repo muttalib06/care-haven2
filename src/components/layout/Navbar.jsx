@@ -8,9 +8,8 @@ import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
-
 function Navbar(props) {
-  const router = useRouter()
+  const router = useRouter();
   const { user, logout } = useAuth();
   // console.log(user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -35,7 +34,7 @@ function Navbar(props) {
   };
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="shrink-0 flex items-center">
@@ -99,6 +98,15 @@ function Navbar(props) {
                 className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
                 Dashboard
+              </Link>
+            )}
+
+            {user && (
+              <Link
+                href="/become-caregiver"
+                className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
+              >
+                Become a Caregiver
               </Link>
             )}
           </div>

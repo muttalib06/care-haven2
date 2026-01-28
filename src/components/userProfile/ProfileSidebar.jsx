@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import {
   User,
   CreditCard,
@@ -7,14 +8,26 @@ import {
   Heart,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const ProfileSidebar = ({ loggedInUser, activeTab, setActiveTab }) => {
+  const { logout } = useAuth();
+  const router = useRouter();
   const stats = [
     { label: "Total Bookings", value: "24", icon: Calendar },
     { label: "Active Care", value: "3", icon: Heart },
   ];
 
-  
+  const handleLogout = async () => {
+    await logout();
+    Swal.fire({
+      title: "Logout successfully",
+      icon: "success",
+      draggable: true,
+    });
+    router.push("/login")
+  };
 
   return (
     <div className="lg:col-span-1">
@@ -82,7 +95,7 @@ const ProfileSidebar = ({ loggedInUser, activeTab, setActiveTab }) => {
 
         {/* Logout Button */}
         <div className="border-t border-gray-200 p-6">
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium">
+          <button onClick={() => handleLogout()} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium">
             <LogOut className="w-5 h-5" />
             Sign Out
           </button>
