@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/lib/validation/auth";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import LoadingPage from "@/components/loading/LoadingPage";
 
 const Login = () => {
@@ -16,6 +16,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callback = searchParams.get("callback" || "/");
 
   // helper function to handle error;
 
@@ -59,7 +61,7 @@ const Login = () => {
 
         case "auth/account-exists-with-different-credential":
           setError(
-            "An account exists with this email using a different sign-in method."
+            "An account exists with this email using a different sign-in method.",
           );
           break;
 
@@ -111,11 +113,12 @@ const Login = () => {
       const email = data.email;
       const password = data.password;
       await login(email, password);
-      router.push("/");
+      router.push(callback);
     } catch (error) {
       handleError(error);
     } finally {
       setLoading(false);
+      reset()
     }
   };
 
