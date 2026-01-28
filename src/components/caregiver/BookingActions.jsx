@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import { Calendar, MessageCircle, X, Check } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function BookingActions({ caregiver }) {
+  const { user } = useAuth();
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [messageSuccess, setMessageSuccess] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Booking form state
   const [bookingData, setBookingData] = useState({
@@ -22,6 +27,13 @@ export default function BookingActions({ caregiver }) {
     subject: "",
     message: "",
   });
+
+  const handleOpenBooking = () => {
+    if (!user) {
+      router.push(`/login?callback=${pathname}`);
+    }
+    setShowBookingModal(true);
+  };
 
   // Handle booking submission
   const handleBooking = (e) => {
@@ -80,7 +92,7 @@ export default function BookingActions({ caregiver }) {
       {/* Action Buttons */}
       <div className="space-y-3">
         <button
-          onClick={() => setShowBookingModal(true)}
+          onClick={() => handleOpenBooking()}
           className="w-full bg-[#3490c5] hover:bg-[#2d7ba8] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
         >
           <Calendar className="w-5 h-5" />
