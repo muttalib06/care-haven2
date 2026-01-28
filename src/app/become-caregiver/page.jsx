@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { 
-  User, 
-  Briefcase, 
-  Award, 
-  Shield, 
-  Calendar, 
+import { useState } from "react";
+import {
+  User,
+  Briefcase,
+  Award,
+  Shield,
+  Calendar,
   CreditCard,
   Upload,
   CheckCircle2,
@@ -20,44 +20,50 @@ import {
   Heart,
   Star,
   Users,
-  Home
-} from 'lucide-react';
+  Home,
+} from "lucide-react";
+import Image from "next/image";
+import { saveCaregiver } from "@/data-handling/saveCaregiver";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 export default function BecomeCaregiver() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // Personal Details
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    dateOfBirth: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    dateOfBirth: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
     profileImage: null,
-    
+
     // Professional Experience
-    yearsOfExperience: '',
+    yearsOfExperience: "",
     serviceTypes: [],
     skills: [],
     languages: [],
-    bio: '',
-    aboutMe: '',
-    hourlyRate: '',
-    
+    bio: "",
+    aboutMe: "",
+    hourlyRate: "",
+
     // Education
-    education: [{ degree: '', institution: '', year: '' }],
-    
+    education: [{ degree: "", institution: "", year: "" }],
+
     // Certifications
     certificates: [],
     certificateFiles: [],
-    
+
     // Background Check
     backgroundCheckConsent: false,
-    
+
     // Availability
     availability: {
       monday: { available: false, timeSlots: [] },
@@ -66,180 +72,465 @@ export default function BecomeCaregiver() {
       thursday: { available: false, timeSlots: [] },
       friday: { available: false, timeSlots: [] },
       saturday: { available: false, timeSlots: [] },
-      sunday: { available: false, timeSlots: [] }
+      sunday: { available: false, timeSlots: [] },
     },
-    minHours: '',
-    maxDistance: '',
+    minHours: "",
+    maxDistance: "",
     liveIn: false,
     overnight: false,
-    
+
     // Bank Details
-    accountHolderName: '',
-    bankName: '',
-    accountNumber: '',
-    routingNumber: '',
-    accountType: 'checking'
+    accountHolderName: "",
+    bankName: "",
+    accountNumber: "",
+    routingNumber: "",
+    accountType: "checking",
   });
 
   const steps = [
-    { id: 0, title: 'Personal Details', icon: User, description: 'Tell us about yourself' },
-    { id: 1, title: 'Experience', icon: Briefcase, description: 'Your professional background' },
-    { id: 2, title: 'Certifications', icon: Award, description: 'Upload your credentials' },
-    { id: 3, title: 'Background Check', icon: Shield, description: 'Verification consent' },
-    { id: 4, title: 'Availability', icon: Calendar, description: 'Set your schedule' },
-    { id: 5, title: 'Payment Info', icon: CreditCard, description: 'Bank account details' }
+    {
+      id: 0,
+      title: "Personal Details",
+      icon: User,
+      description: "Tell us about yourself",
+    },
+    {
+      id: 1,
+      title: "Experience",
+      icon: Briefcase,
+      description: "Your professional background",
+    },
+    {
+      id: 2,
+      title: "Certifications",
+      icon: Award,
+      description: "Upload your credentials",
+    },
+    {
+      id: 3,
+      title: "Background Check",
+      icon: Shield,
+      description: "Verification consent",
+    },
+    {
+      id: 4,
+      title: "Availability",
+      icon: Calendar,
+      description: "Set your schedule",
+    },
+    {
+      id: 5,
+      title: "Payment Info",
+      icon: CreditCard,
+      description: "Bank account details",
+    },
   ];
 
-  const serviceTypeOptions = ['Child', 'Elderly', 'Special Needs'];
+  const serviceTypeOptions = ["Child", "Elderly", "Special Needs"];
   const skillOptions = [
-    'First Aid', 'CPR', 'Meal Preparation', 'Medication Management',
-    'Mobility Assistance', 'Dementia Care', 'Autism Support', 
-    'Behavioral Therapy', 'Educational Activities', 'Physical Therapy Support',
-    'Companionship', 'Light Housekeeping', 'Transportation'
+    "First Aid",
+    "CPR",
+    "Meal Preparation",
+    "Medication Management",
+    "Mobility Assistance",
+    "Dementia Care",
+    "Autism Support",
+    "Behavioral Therapy",
+    "Educational Activities",
+    "Physical Therapy Support",
+    "Companionship",
+    "Light Housekeeping",
+    "Transportation",
   ];
-  const languageOptions = ['English', 'Spanish', 'French', 'Mandarin', 'Cantonese', 'Hindi', 'Arabic', 'Portuguese'];
-  const timeSlots = ['Morning', 'Afternoon', 'Evening', 'Night'];
+  const languageOptions = [
+    "English",
+    "Spanish",
+    "French",
+    "Mandarin",
+    "Cantonese",
+    "Hindi",
+    "Arabic",
+    "Portuguese",
+  ];
+  const timeSlots = ["Morning", "Afternoon", "Evening", "Night"];
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleArrayToggle = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: prev[field].includes(value)
-        ? prev[field].filter(item => item !== value)
-        : [...prev[field], value]
+        ? prev[field].filter((item) => item !== value)
+        : [...prev[field], value],
     }));
   };
 
   const handleAvailabilityToggle = (day) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       availability: {
         ...prev.availability,
         [day]: {
           ...prev.availability[day],
           available: !prev.availability[day].available,
-          timeSlots: !prev.availability[day].available ? [] : prev.availability[day].timeSlots
-        }
-      }
+          timeSlots: !prev.availability[day].available
+            ? []
+            : prev.availability[day].timeSlots,
+        },
+      },
     }));
   };
 
   const handleTimeSlotToggle = (day, slot) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       availability: {
         ...prev.availability,
         [day]: {
           ...prev.availability[day],
           timeSlots: prev.availability[day].timeSlots.includes(slot)
-            ? prev.availability[day].timeSlots.filter(s => s !== slot)
-            : [...prev.availability[day].timeSlots, slot]
-        }
-      }
+            ? prev.availability[day].timeSlots.filter((s) => s !== slot)
+            : [...prev.availability[day].timeSlots, slot],
+        },
+      },
     }));
   };
 
   const handleFileUpload = (e, type) => {
     const files = Array.from(e.target.files);
-    if (type === 'profile') {
-      handleInputChange('profileImage', files[0]);
-    } else if (type === 'certificates') {
-      setFormData(prev => ({
+    if (type === "profile") {
+      handleInputChange("profileImage", files[0]);
+    } else if (type === "certificates") {
+      setFormData((prev) => ({
         ...prev,
-        certificateFiles: [...prev.certificateFiles, ...files]
+        certificateFiles: [...prev.certificateFiles, ...files],
       }));
     }
   };
 
   const addEducation = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      education: [...prev.education, { degree: '', institution: '', year: '' }]
+      education: [...prev.education, { degree: "", institution: "", year: "" }],
     }));
   };
 
   const updateEducation = (index, field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      education: prev.education.map((edu, i) => 
-        i === index ? { ...edu, [field]: value } : edu
-      )
+      education: prev.education.map((edu, i) =>
+        i === index ? { ...edu, [field]: value } : edu,
+      ),
     }));
   };
 
   const removeEducation = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      education: prev.education.filter((_, i) => i !== index)
+      education: prev.education.filter((_, i) => i !== index),
     }));
   };
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
+  // Validation function
+  const validateForm = () => {
+    const errors = [];
+
+    // Personal Details validation
+    if (!formData.firstName.trim()) errors.push("First name is required");
+    if (!formData.lastName.trim()) errors.push("Last name is required");
+    if (!formData.email.trim()) errors.push("Email is required");
+    if (!formData.phone.trim()) errors.push("Phone is required");
+    if (!formData.dateOfBirth) errors.push("Date of birth is required");
+    if (!formData.address.trim()) errors.push("Address is required");
+    if (!formData.city.trim()) errors.push("City is required");
+    if (!formData.state.trim()) errors.push("State is required");
+    if (!formData.zipCode.trim()) errors.push("ZIP code is required");
+    if (!formData.country.trim()) errors.push("Country is required");
+
+    // Experience validation
+    if (!formData.yearsOfExperience)
+      errors.push("Years of experience is required");
+    if (!formData.hourlyRate) errors.push("Hourly rate is required");
+    if (formData.serviceTypes.length === 0)
+      errors.push("At least one service type is required");
+    if (formData.skills.length === 0)
+      errors.push("At least one skill is required");
+    if (formData.languages.length === 0)
+      errors.push("At least one language is required");
+    if (!formData.bio.trim()) errors.push("Bio is required");
+    if (!formData.aboutMe.trim()) errors.push("About me is required");
+
+    // Background check validation
+    if (!formData.backgroundCheckConsent)
+      errors.push("Background check consent is required");
+
+    // Availability validation
+    if (!formData.minHours) errors.push("Minimum hours is required");
+    if (!formData.maxDistance) errors.push("Maximum distance is required");
+
+    // Bank details validation
+    if (!formData.accountHolderName.trim())
+      errors.push("Account holder name is required");
+    if (!formData.bankName.trim()) errors.push("Bank name is required");
+    if (!formData.accountNumber.trim())
+      errors.push("Account number is required");
+    if (!formData.routingNumber.trim())
+      errors.push("Routing number is required");
+
+    return errors;
+  };
+
+  // Prepare form data for submission (convert File objects to base64 if needed)
+  const prepareFormData = async () => {
+    const prepared = { ...formData };
+
+    // Convert profile image to base64 if needed
+    if (formData.profileImage && formData.profileImage instanceof File) {
+      try {
+        const base64 = await fileToBase64(formData.profileImage);
+        prepared.profileImage = base64;
+      } catch (error) {
+        console.error("Error converting profile image:", error);
+        prepared.profileImage = null;
+      }
+    }
+
+    // Convert certificate files to base64 if needed
+    if (formData.certificateFiles && formData.certificateFiles.length > 0) {
+      try {
+        const certificatePromises = formData.certificateFiles.map((file) =>
+          fileToBase64(file).then((base64) => ({
+            name: file.name,
+            data: base64,
+          })),
+        );
+        prepared.certificateFiles = await Promise.all(certificatePromises);
+      } catch (error) {
+        console.error("Error converting certificate files:", error);
+        prepared.certificateFiles = [];
+      }
+    }
+
+    // Convert numeric strings to numbers
+    prepared.yearsOfExperience = parseFloat(formData.yearsOfExperience) || 0;
+    prepared.hourlyRate = parseFloat(formData.hourlyRate) || 0;
+    prepared.minHours = parseFloat(formData.minHours) || 0;
+    prepared.maxDistance = parseFloat(formData.maxDistance) || 0;
+
+    // Filter out empty education entries
+    prepared.education = formData.education.filter(
+      (edu) => edu.degree || edu.institution || edu.year,
+    );
+
+    return prepared;
+  };
+
+  // Helper function to convert File to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  // In BecomeCaregiver.jsx - Replace prepareFormData and handleSubmit
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission
-    alert('Application submitted successfully! We will review your application and get back to you soon.');
+
+    if (isSubmitting) return;
+
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      Swal.fire({
+        title: "Validation Error",
+        html: validationErrors.map((err) => `• ${err}`).join("<br>"),
+        icon: "error",
+        draggable: true,
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Create FormData object
+      const formDataToSend = new FormData();
+
+      // Append simple fields
+      formDataToSend.append("firstName", formData.firstName);
+      formDataToSend.append("lastName", formData.lastName);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("phone", formData.phone);
+      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
+      formDataToSend.append("address", formData.address);
+      formDataToSend.append("city", formData.city);
+      formDataToSend.append("state", formData.state);
+      formDataToSend.append("zipCode", formData.zipCode);
+      formDataToSend.append("country", formData.country);
+
+      // Professional fields
+      formDataToSend.append("yearsOfExperience", formData.yearsOfExperience);
+      formDataToSend.append("hourlyRate", formData.hourlyRate);
+      formDataToSend.append("bio", formData.bio);
+      formDataToSend.append("aboutMe", formData.aboutMe);
+
+      // Arrays as JSON strings
+      formDataToSend.append(
+        "serviceTypes",
+        JSON.stringify(formData.serviceTypes),
+      );
+      formDataToSend.append("skills", JSON.stringify(formData.skills));
+      formDataToSend.append("languages", JSON.stringify(formData.languages));
+      formDataToSend.append(
+        "education",
+        JSON.stringify(
+          formData.education.filter(
+            (edu) => edu.degree || edu.institution || edu.year,
+          ),
+        ),
+      );
+
+      // Availability
+      formDataToSend.append(
+        "availability",
+        JSON.stringify(formData.availability),
+      );
+      formDataToSend.append("minHours", formData.minHours);
+      formDataToSend.append("maxDistance", formData.maxDistance);
+      formDataToSend.append("liveIn", formData.liveIn);
+      formDataToSend.append("overnight", formData.overnight);
+
+      // Background check
+      formDataToSend.append(
+        "backgroundCheckConsent",
+        formData.backgroundCheckConsent,
+      );
+
+      // Bank details
+      formDataToSend.append("accountHolderName", formData.accountHolderName);
+      formDataToSend.append("bankName", formData.bankName);
+      formDataToSend.append("accountNumber", formData.accountNumber);
+      formDataToSend.append("routingNumber", formData.routingNumber);
+      formDataToSend.append("accountType", formData.accountType);
+
+      // Append profile image file
+      if (formData.profileImage instanceof File) {
+        formDataToSend.append("profileImage", formData.profileImage);
+      }
+
+      // Append certificate files
+      formData.certificateFiles.forEach((file) => {
+        if (file instanceof File) {
+          formDataToSend.append("certificates", file);
+        }
+      });
+
+      // Submit to backend
+      const response = await saveCaregiver(formDataToSend);
+
+      if (response && (response.success || response.id || response.data)) {
+        await Swal.fire({
+          title: "Submitted successfully",
+          text: "Your application has been received!",
+          icon: "success",
+          draggable: true,
+        });
+        router.push("/application-success");
+      } else {
+        throw new Error(response?.message || "Submission failed");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+
+      Swal.fire({
+        title: "Submission Failed",
+        text:
+          error.response?.data?.error ||
+          error.message ||
+          "An error occurred while submitting your application.",
+        icon: "error",
+        draggable: true,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-cyan-50">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[#3490c5] to-[#2563eb] text-white">
+      <div className="relative overflow-hidden bg-linear-to-r from-[#3490c5] to-[#2563eb] text-white">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <Heart className="w-4 h-4" />
-              <span className="text-sm font-medium">Join Our Caring Community</span>
+              <span className="text-sm font-medium">
+                Join Our Caring Community
+              </span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
               Become a Caregiver
             </h1>
             <p className="text-xl sm:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              Make a meaningful difference in people's lives while building a flexible career you'll love
+              Make a meaningful difference in people's lives while building a
+              flexible career you'll love
             </p>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <div className="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 mx-auto">
                   <Star className="w-6 h-6" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Flexible Schedule</h3>
-                <p className="text-blue-100 text-sm">Work when it suits you best</p>
+                <h3 className="font-semibold text-lg mb-2">
+                  Flexible Schedule
+                </h3>
+                <p className="text-blue-100 text-sm">
+                  Work when it suits you best
+                </p>
               </div>
-              
+
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <div className="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 mx-auto">
                   <Users className="w-6 h-6" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2">Verified Families</h3>
-                <p className="text-blue-100 text-sm">Safe, trusted connections</p>
+                <h3 className="font-semibold text-lg mb-2">
+                  Verified Families
+                </h3>
+                <p className="text-blue-100 text-sm">
+                  Safe, trusted connections
+                </p>
               </div>
-              
+
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <div className="bg-white/20 w-12 h-12 rounded-xl flex items-center justify-center mb-4 mx-auto">
                   <CreditCard className="w-6 h-6" />
@@ -260,30 +551,47 @@ export default function BecomeCaregiver() {
               const Icon = step.icon;
               const isActive = index === currentStep;
               const isCompleted = index < currentStep;
-              
+
               return (
                 <div key={step.id} className="flex items-center flex-shrink-0">
                   <div className="flex flex-col items-center">
-                    <div className={`
+                    <div
+                      className={`
                       w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
-                      ${isActive ? 'bg-[#3490c5] text-white scale-110 shadow-lg' : 
-                        isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}
-                    `}>
-                      {isCompleted ? <CheckCircle2 className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
+                      ${
+                        isActive
+                          ? "bg-[#3490c5] text-white scale-110 shadow-lg"
+                          : isCompleted
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-200 text-gray-500"
+                      }
+                    `}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle2 className="w-6 h-6" />
+                      ) : (
+                        <Icon className="w-6 h-6" />
+                      )}
                     </div>
                     <div className="mt-2 text-center min-w-[100px]">
-                      <p className={`text-xs sm:text-sm font-medium ${isActive ? 'text-[#3490c5]' : 'text-gray-600'}`}>
+                      <p
+                        className={`text-xs sm:text-sm font-medium ${isActive ? "text-[#3490c5]" : "text-gray-600"}`}
+                      >
                         {step.title}
                       </p>
-                      <p className="text-xs text-gray-500 hidden sm:block">{step.description}</p>
+                      <p className="text-xs text-gray-500 hidden sm:block">
+                        {step.description}
+                      </p>
                     </div>
                   </div>
-                  
+
                   {index < steps.length - 1 && (
-                    <div className={`
+                    <div
+                      className={`
                       w-12 sm:w-24 h-1 mx-2 transition-all duration-300
-                      ${isCompleted ? 'bg-green-500' : 'bg-gray-200'}
-                    `} />
+                      ${isCompleted ? "bg-green-500" : "bg-gray-200"}
+                    `}
+                    />
                   )}
                 </div>
               );
@@ -294,15 +602,21 @@ export default function BecomeCaregiver() {
 
       {/* Form Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
+        >
           <div className="p-8 sm:p-12">
-            
             {/* Step 0: Personal Details */}
             {currentStep === 0 && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Personal Information</h2>
-                  <p className="text-gray-600">Let's start with your basic details</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    Personal Information
+                  </h2>
+                  <p className="text-gray-600">
+                    Let's start with your basic details
+                  </p>
                 </div>
 
                 {/* Profile Image Upload */}
@@ -310,10 +624,11 @@ export default function BecomeCaregiver() {
                   <div className="relative group">
                     <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#3490c5] to-[#2563eb] flex items-center justify-center overflow-hidden">
                       {formData.profileImage ? (
-                        <img 
-                          src={URL.createObjectURL(formData.profileImage)} 
-                          alt="Profile" 
-                          className="w-full h-full object-cover"
+                        <Image
+                          src={URL.createObjectURL(formData.profileImage)}
+                          fill
+                          alt="Profile"
+                          className="w-full rounded-full h-full object-cover"
                         />
                       ) : (
                         <User className="w-16 h-16 text-white" />
@@ -321,15 +636,17 @@ export default function BecomeCaregiver() {
                     </div>
                     <label className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-lg cursor-pointer hover:bg-gray-50 transition-colors border-2 border-gray-100">
                       <Upload className="w-5 h-5 text-[#3490c5]" />
-                      <input 
-                        type="file" 
+                      <input
+                        type="file"
                         accept="image/*"
-                        onChange={(e) => handleFileUpload(e, 'profile')}
-                        className="hidden" 
+                        onChange={(e) => handleFileUpload(e, "profile")}
+                        className="hidden"
                       />
                     </label>
                   </div>
-                  <p className="text-sm text-gray-500 mt-3">Upload your profile photo</p>
+                  <p className="text-sm text-gray-500 mt-3">
+                    Upload your profile photo
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -341,7 +658,9 @@ export default function BecomeCaregiver() {
                       type="text"
                       required
                       value={formData.firstName}
-                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("firstName", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="John"
                     />
@@ -355,7 +674,9 @@ export default function BecomeCaregiver() {
                       type="text"
                       required
                       value={formData.lastName}
-                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("lastName", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="Doe"
                     />
@@ -370,7 +691,9 @@ export default function BecomeCaregiver() {
                       type="email"
                       required
                       value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="john.doe@email.com"
                     />
@@ -385,7 +708,9 @@ export default function BecomeCaregiver() {
                       type="tel"
                       required
                       value={formData.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="+1-555-0123"
                     />
@@ -399,7 +724,9 @@ export default function BecomeCaregiver() {
                       type="date"
                       required
                       value={formData.dateOfBirth}
-                      onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("dateOfBirth", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                     />
                   </div>
@@ -414,7 +741,9 @@ export default function BecomeCaregiver() {
                     type="text"
                     required
                     value={formData.address}
-                    onChange={(e) => handleInputChange('address', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("address", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                     placeholder="123 Main Street"
                   />
@@ -422,48 +751,64 @@ export default function BecomeCaregiver() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      City *
+                    </label>
                     <input
                       type="text"
                       required
                       value={formData.city}
-                      onChange={(e) => handleInputChange('city', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("city", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="Vancouver"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">State/Province *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      State/Province *
+                    </label>
                     <input
                       type="text"
                       required
                       value={formData.state}
-                      onChange={(e) => handleInputChange('state', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("state", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="British Columbia"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">ZIP/Postal Code *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      ZIP/Postal Code *
+                    </label>
                     <input
                       type="text"
                       required
                       value={formData.zipCode}
-                      onChange={(e) => handleInputChange('zipCode', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("zipCode", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="V6B 1A1"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Country *</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Country *
+                    </label>
                     <input
                       type="text"
                       required
                       value={formData.country}
-                      onChange={(e) => handleInputChange('country', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("country", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="Canada"
                     />
@@ -476,8 +821,12 @@ export default function BecomeCaregiver() {
             {currentStep === 1 && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Professional Experience</h2>
-                  <p className="text-gray-600">Share your expertise and background</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    Professional Experience
+                  </h2>
+                  <p className="text-gray-600">
+                    Share your expertise and background
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -490,7 +839,9 @@ export default function BecomeCaregiver() {
                       required
                       min="0"
                       value={formData.yearsOfExperience}
-                      onChange={(e) => handleInputChange('yearsOfExperience', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("yearsOfExperience", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="5"
                     />
@@ -505,7 +856,9 @@ export default function BecomeCaregiver() {
                       required
                       min="0"
                       value={formData.hourlyRate}
-                      onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("hourlyRate", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="25"
                     />
@@ -514,19 +867,24 @@ export default function BecomeCaregiver() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Service Types * <span className="text-gray-500 font-normal">(Select all that apply)</span>
+                    Service Types *{" "}
+                    <span className="text-gray-500 font-normal">
+                      (Select all that apply)
+                    </span>
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {serviceTypeOptions.map(type => (
+                    {serviceTypeOptions.map((type) => (
                       <button
                         key={type}
                         type="button"
-                        onClick={() => handleArrayToggle('serviceTypes', type)}
+                        onClick={() => handleArrayToggle("serviceTypes", type)}
                         className={`
                           px-4 py-3 rounded-xl border-2 font-medium transition-all text-sm
-                          ${formData.serviceTypes.includes(type)
-                            ? 'border-[#3490c5] bg-[#3490c5] text-white shadow-md'
-                            : 'border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]'}
+                          ${
+                            formData.serviceTypes.includes(type)
+                              ? "border-[#3490c5] bg-[#3490c5] text-white shadow-md"
+                              : "border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]"
+                          }
                         `}
                       >
                         {type}
@@ -537,19 +895,24 @@ export default function BecomeCaregiver() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Skills * <span className="text-gray-500 font-normal">(Select all that apply)</span>
+                    Skills *{" "}
+                    <span className="text-gray-500 font-normal">
+                      (Select all that apply)
+                    </span>
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {skillOptions.map(skill => (
+                    {skillOptions.map((skill) => (
                       <button
                         key={skill}
                         type="button"
-                        onClick={() => handleArrayToggle('skills', skill)}
+                        onClick={() => handleArrayToggle("skills", skill)}
                         className={`
                           px-3 py-2 rounded-lg border font-medium transition-all text-xs sm:text-sm
-                          ${formData.skills.includes(skill)
-                            ? 'border-[#3490c5] bg-blue-50 text-[#3490c5]'
-                            : 'border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]'}
+                          ${
+                            formData.skills.includes(skill)
+                              ? "border-[#3490c5] bg-blue-50 text-[#3490c5]"
+                              : "border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]"
+                          }
                         `}
                       >
                         {skill}
@@ -560,19 +923,24 @@ export default function BecomeCaregiver() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Languages Spoken * <span className="text-gray-500 font-normal">(Select all that apply)</span>
+                    Languages Spoken *{" "}
+                    <span className="text-gray-500 font-normal">
+                      (Select all that apply)
+                    </span>
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {languageOptions.map(lang => (
+                    {languageOptions.map((lang) => (
                       <button
                         key={lang}
                         type="button"
-                        onClick={() => handleArrayToggle('languages', lang)}
+                        onClick={() => handleArrayToggle("languages", lang)}
                         className={`
                           px-3 py-2 rounded-lg border font-medium transition-all text-sm
-                          ${formData.languages.includes(lang)
-                            ? 'border-[#3490c5] bg-blue-50 text-[#3490c5]'
-                            : 'border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]'}
+                          ${
+                            formData.languages.includes(lang)
+                              ? "border-[#3490c5] bg-blue-50 text-[#3490c5]"
+                              : "border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]"
+                          }
                         `}
                       >
                         {lang}
@@ -583,12 +951,15 @@ export default function BecomeCaregiver() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Professional Bio * <span className="text-gray-500 font-normal">(Brief summary, 2-3 sentences)</span>
+                    Professional Bio *{" "}
+                    <span className="text-gray-500 font-normal">
+                      (Brief summary, 2-3 sentences)
+                    </span>
                   </label>
                   <textarea
                     required
                     value={formData.bio}
-                    onChange={(e) => handleInputChange('bio', e.target.value)}
+                    onChange={(e) => handleInputChange("bio", e.target.value)}
                     rows={3}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all resize-none"
                     placeholder="I am a dedicated caregiver with extensive experience in child care and special needs support..."
@@ -597,12 +968,17 @@ export default function BecomeCaregiver() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    About Me * <span className="text-gray-500 font-normal">(Detailed description)</span>
+                    About Me *{" "}
+                    <span className="text-gray-500 font-normal">
+                      (Detailed description)
+                    </span>
                   </label>
                   <textarea
                     required
                     value={formData.aboutMe}
-                    onChange={(e) => handleInputChange('aboutMe', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("aboutMe", e.target.value)
+                    }
                     rows={6}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all resize-none"
                     placeholder="Tell families about your experience, approach to caregiving, what makes you special..."
@@ -615,19 +991,30 @@ export default function BecomeCaregiver() {
                     Education
                   </label>
                   {formData.education.map((edu, index) => (
-                    <div key={index} className="mb-4 p-4 border border-gray-200 rounded-xl bg-gray-50">
+                    <div
+                      key={index}
+                      className="mb-4 p-4 border border-gray-200 rounded-xl bg-gray-50"
+                    >
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <input
                           type="text"
                           value={edu.degree}
-                          onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+                          onChange={(e) =>
+                            updateEducation(index, "degree", e.target.value)
+                          }
                           placeholder="Degree"
                           className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none"
                         />
                         <input
                           type="text"
                           value={edu.institution}
-                          onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+                          onChange={(e) =>
+                            updateEducation(
+                              index,
+                              "institution",
+                              e.target.value,
+                            )
+                          }
                           placeholder="Institution"
                           className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none"
                         />
@@ -635,7 +1022,9 @@ export default function BecomeCaregiver() {
                           <input
                             type="number"
                             value={edu.year}
-                            onChange={(e) => updateEducation(index, 'year', e.target.value)}
+                            onChange={(e) =>
+                              updateEducation(index, "year", e.target.value)
+                            }
                             placeholder="Year"
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none"
                           />
@@ -667,8 +1056,12 @@ export default function BecomeCaregiver() {
             {currentStep === 2 && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Certifications & Credentials</h2>
-                  <p className="text-gray-600">Upload your professional certifications</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    Certifications & Credentials
+                  </h2>
+                  <p className="text-gray-600">
+                    Upload your professional certifications
+                  </p>
                 </div>
 
                 <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-[#3490c5] transition-colors">
@@ -676,39 +1069,54 @@ export default function BecomeCaregiver() {
                     <Upload className="w-8 h-8 text-[#3490c5]" />
                   </div>
                   <label className="cursor-pointer">
-                    <span className="text-[#3490c5] font-semibold hover:underline">Click to upload</span>
+                    <span className="text-[#3490c5] font-semibold hover:underline">
+                      Click to upload
+                    </span>
                     <span className="text-gray-600"> or drag and drop</span>
-                    <input 
-                      type="file" 
+                    <input
+                      type="file"
                       multiple
                       accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => handleFileUpload(e, 'certificates')}
-                      className="hidden" 
+                      onChange={(e) => handleFileUpload(e, "certificates")}
+                      className="hidden"
                     />
                   </label>
-                  <p className="text-sm text-gray-500 mt-2">PDF, JPG, PNG up to 10MB each</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    PDF, JPG, PNG up to 10MB each
+                  </p>
                 </div>
 
                 {formData.certificateFiles.length > 0 && (
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-gray-900">Uploaded Files:</h3>
+                    <h3 className="font-semibold text-gray-900">
+                      Uploaded Files:
+                    </h3>
                     {formData.certificateFiles.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200"
+                      >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-[#3490c5] rounded-lg flex items-center justify-center">
                             <FileText className="w-5 h-5 text-white" />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{file.name}</p>
-                            <p className="text-sm text-gray-500">{(file.size / 1024).toFixed(2)} KB</p>
+                            <p className="font-medium text-gray-900">
+                              {file.name}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {(file.size / 1024).toFixed(2)} KB
+                            </p>
                           </div>
                         </div>
                         <button
                           type="button"
                           onClick={() => {
-                            setFormData(prev => ({
+                            setFormData((prev) => ({
                               ...prev,
-                              certificateFiles: prev.certificateFiles.filter((_, i) => i !== index)
+                              certificateFiles: prev.certificateFiles.filter(
+                                (_, i) => i !== index,
+                              ),
                             }));
                           }}
                           className="text-red-600 hover:text-red-800 font-medium"
@@ -751,8 +1159,12 @@ export default function BecomeCaregiver() {
             {currentStep === 3 && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Background Verification</h2>
-                  <p className="text-gray-600">Help us ensure safety for all families</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    Background Verification
+                  </h2>
+                  <p className="text-gray-600">
+                    Help us ensure safety for all families
+                  </p>
                 </div>
 
                 <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-2xl p-8">
@@ -761,14 +1173,20 @@ export default function BecomeCaregiver() {
                       <Shield className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Why We Need This</h3>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                        Why We Need This
+                      </h3>
                       <p className="text-gray-700 mb-4 leading-relaxed">
-                        CareHaven is committed to creating a safe, trusted platform for families and caregivers. 
-                        A comprehensive background check helps us verify your identity and ensure the safety of 
-                        the families you'll be working with.
+                        CareHaven is committed to creating a safe, trusted
+                        platform for families and caregivers. A comprehensive
+                        background check helps us verify your identity and
+                        ensure the safety of the families you'll be working
+                        with.
                       </p>
                       <div className="bg-white rounded-xl p-4 space-y-3">
-                        <h4 className="font-semibold text-gray-900">What We'll Check:</h4>
+                        <h4 className="font-semibold text-gray-900">
+                          What We'll Check:
+                        </h4>
                         <ul className="space-y-2 text-sm text-gray-700">
                           <li className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 bg-[#3490c5] rounded-full"></div>
@@ -798,7 +1216,12 @@ export default function BecomeCaregiver() {
                       <input
                         type="checkbox"
                         checked={formData.backgroundCheckConsent}
-                        onChange={(e) => handleInputChange('backgroundCheckConsent', e.target.checked)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "backgroundCheckConsent",
+                            e.target.checked,
+                          )
+                        }
                         className="w-6 h-6 rounded border-gray-300 text-[#3490c5] focus:ring-[#3490c5] cursor-pointer"
                       />
                     </div>
@@ -807,10 +1230,13 @@ export default function BecomeCaregiver() {
                         I consent to a background check *
                       </p>
                       <p className="text-sm text-gray-600 leading-relaxed">
-                        I authorize CareHaven and its designated agents to conduct a comprehensive background 
-                        check, including but not limited to criminal records, identity verification, and reference 
-                        checks. I understand that this information will be used solely for the purpose of ensuring 
-                        platform safety and will be handled in accordance with applicable privacy laws.
+                        I authorize CareHaven and its designated agents to
+                        conduct a comprehensive background check, including but
+                        not limited to criminal records, identity verification,
+                        and reference checks. I understand that this information
+                        will be used solely for the purpose of ensuring platform
+                        safety and will be handled in accordance with applicable
+                        privacy laws.
                       </p>
                     </div>
                   </label>
@@ -820,7 +1246,8 @@ export default function BecomeCaregiver() {
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
                     <div className="text-amber-600 mt-0.5">⚠️</div>
                     <p className="text-sm text-amber-800">
-                      Background check consent is required to proceed with your application and ensure the safety of our community.
+                      Background check consent is required to proceed with your
+                      application and ensure the safety of our community.
                     </p>
                   </div>
                 )}
@@ -831,13 +1258,20 @@ export default function BecomeCaregiver() {
             {currentStep === 4 && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Your Availability</h2>
-                  <p className="text-gray-600">Set your working schedule and preferences</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    Your Availability
+                  </h2>
+                  <p className="text-gray-600">
+                    Set your working schedule and preferences
+                  </p>
                 </div>
 
                 <div className="space-y-4">
-                  {Object.keys(formData.availability).map(day => (
-                    <div key={day} className="border border-gray-200 rounded-xl p-5 hover:border-[#3490c5] transition-colors">
+                  {Object.keys(formData.availability).map((day) => (
+                    <div
+                      key={day}
+                      className="border border-gray-200 rounded-xl p-5 hover:border-[#3490c5] transition-colors"
+                    >
                       <div className="flex items-center justify-between mb-4">
                         <label className="flex items-center gap-3 cursor-pointer flex-1">
                           <input
@@ -846,27 +1280,34 @@ export default function BecomeCaregiver() {
                             onChange={() => handleAvailabilityToggle(day)}
                             className="w-5 h-5 rounded border-gray-300 text-[#3490c5] focus:ring-[#3490c5]"
                           />
-                          <span className="font-semibold text-gray-900 capitalize">{day}</span>
+                          <span className="font-semibold text-gray-900 capitalize">
+                            {day}
+                          </span>
                         </label>
                         {formData.availability[day].available && (
                           <span className="text-sm text-[#3490c5] font-medium">
-                            {formData.availability[day].timeSlots.length} slot(s) selected
+                            {formData.availability[day].timeSlots.length}{" "}
+                            slot(s) selected
                           </span>
                         )}
                       </div>
-                      
+
                       {formData.availability[day].available && (
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 ml-8">
-                          {timeSlots.map(slot => (
+                          {timeSlots.map((slot) => (
                             <button
                               key={slot}
                               type="button"
                               onClick={() => handleTimeSlotToggle(day, slot)}
                               className={`
                                 px-3 py-2 rounded-lg border font-medium transition-all text-sm
-                                ${formData.availability[day].timeSlots.includes(slot)
-                                  ? 'border-[#3490c5] bg-[#3490c5] text-white'
-                                  : 'border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]'}
+                                ${
+                                  formData.availability[day].timeSlots.includes(
+                                    slot,
+                                  )
+                                    ? "border-[#3490c5] bg-[#3490c5] text-white"
+                                    : "border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]"
+                                }
                               `}
                             >
                               <Clock className="w-3 h-3 inline mr-1" />
@@ -889,7 +1330,9 @@ export default function BecomeCaregiver() {
                       required
                       min="1"
                       value={formData.minHours}
-                      onChange={(e) => handleInputChange('minHours', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("minHours", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="3"
                     />
@@ -904,7 +1347,9 @@ export default function BecomeCaregiver() {
                       required
                       min="1"
                       value={formData.maxDistance}
-                      onChange={(e) => handleInputChange('maxDistance', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("maxDistance", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="20"
                     />
@@ -916,12 +1361,18 @@ export default function BecomeCaregiver() {
                     <input
                       type="checkbox"
                       checked={formData.liveIn}
-                      onChange={(e) => handleInputChange('liveIn', e.target.checked)}
+                      onChange={(e) =>
+                        handleInputChange("liveIn", e.target.checked)
+                      }
                       className="w-5 h-5 rounded border-gray-300 text-[#3490c5] focus:ring-[#3490c5]"
                     />
                     <div>
-                      <p className="font-semibold text-gray-900">Live-in Care Available</p>
-                      <p className="text-sm text-gray-600">I'm available for live-in caregiving positions</p>
+                      <p className="font-semibold text-gray-900">
+                        Live-in Care Available
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        I'm available for live-in caregiving positions
+                      </p>
                     </div>
                   </label>
 
@@ -929,12 +1380,18 @@ export default function BecomeCaregiver() {
                     <input
                       type="checkbox"
                       checked={formData.overnight}
-                      onChange={(e) => handleInputChange('overnight', e.target.checked)}
+                      onChange={(e) =>
+                        handleInputChange("overnight", e.target.checked)
+                      }
                       className="w-5 h-5 rounded border-gray-300 text-[#3490c5] focus:ring-[#3490c5]"
                     />
                     <div>
-                      <p className="font-semibold text-gray-900">Overnight Care Available</p>
-                      <p className="text-sm text-gray-600">I'm available for overnight shifts</p>
+                      <p className="font-semibold text-gray-900">
+                        Overnight Care Available
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        I'm available for overnight shifts
+                      </p>
                     </div>
                   </label>
                 </div>
@@ -945,16 +1402,23 @@ export default function BecomeCaregiver() {
             {currentStep === 5 && (
               <div className="space-y-8 animate-fadeIn">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Payment Information</h2>
-                  <p className="text-gray-600">Secure bank details for receiving payments</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    Payment Information
+                  </h2>
+                  <p className="text-gray-600">
+                    Secure bank details for receiving payments
+                  </p>
                 </div>
 
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
                   <Shield className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-semibold text-green-900 mb-1">Your Information is Secure</p>
+                    <p className="font-semibold text-green-900 mb-1">
+                      Your Information is Secure
+                    </p>
                     <p className="text-sm text-green-800">
-                      All payment information is encrypted and securely stored. We use bank-level security to protect your data.
+                      All payment information is encrypted and securely stored.
+                      We use bank-level security to protect your data.
                     </p>
                   </div>
                 </div>
@@ -967,7 +1431,9 @@ export default function BecomeCaregiver() {
                     type="text"
                     required
                     value={formData.accountHolderName}
-                    onChange={(e) => handleInputChange('accountHolderName', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("accountHolderName", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                     placeholder="John Doe"
                   />
@@ -981,7 +1447,9 @@ export default function BecomeCaregiver() {
                     type="text"
                     required
                     value={formData.bankName}
-                    onChange={(e) => handleInputChange('bankName', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("bankName", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                     placeholder="Bank of America"
                   />
@@ -994,24 +1462,32 @@ export default function BecomeCaregiver() {
                   <div className="grid grid-cols-2 gap-4">
                     <button
                       type="button"
-                      onClick={() => handleInputChange('accountType', 'checking')}
+                      onClick={() =>
+                        handleInputChange("accountType", "checking")
+                      }
                       className={`
                         px-4 py-3 rounded-xl border-2 font-medium transition-all
-                        ${formData.accountType === 'checking'
-                          ? 'border-[#3490c5] bg-[#3490c5] text-white'
-                          : 'border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]'}
+                        ${
+                          formData.accountType === "checking"
+                            ? "border-[#3490c5] bg-[#3490c5] text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]"
+                        }
                       `}
                     >
                       Checking Account
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleInputChange('accountType', 'savings')}
+                      onClick={() =>
+                        handleInputChange("accountType", "savings")
+                      }
                       className={`
                         px-4 py-3 rounded-xl border-2 font-medium transition-all
-                        ${formData.accountType === 'savings'
-                          ? 'border-[#3490c5] bg-[#3490c5] text-white'
-                          : 'border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]'}
+                        ${
+                          formData.accountType === "savings"
+                            ? "border-[#3490c5] bg-[#3490c5] text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:border-[#3490c5]"
+                        }
                       `}
                     >
                       Savings Account
@@ -1028,7 +1504,9 @@ export default function BecomeCaregiver() {
                       type="text"
                       required
                       value={formData.accountNumber}
-                      onChange={(e) => handleInputChange('accountNumber', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("accountNumber", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="123456789"
                     />
@@ -1042,7 +1520,9 @@ export default function BecomeCaregiver() {
                       type="text"
                       required
                       value={formData.routingNumber}
-                      onChange={(e) => handleInputChange('routingNumber', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("routingNumber", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#3490c5] focus:border-transparent outline-none transition-all"
                       placeholder="011000015"
                     />
@@ -1055,9 +1535,10 @@ export default function BecomeCaregiver() {
                     Payment Schedule
                   </h3>
                   <p className="text-sm text-gray-700">
-                    Payments are processed weekly via direct deposit. You'll receive your earnings every Friday 
-                    for work completed in the previous week. It typically takes 2-3 business days for funds to 
-                    appear in your account.
+                    Payments are processed weekly via direct deposit. You'll
+                    receive your earnings every Friday for work completed in the
+                    previous week. It typically takes 2-3 business days for
+                    funds to appear in your account.
                   </p>
                 </div>
               </div>
@@ -1072,9 +1553,11 @@ export default function BecomeCaregiver() {
               disabled={currentStep === 0}
               className={`
                 flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all
-                ${currentStep === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-[#3490c5] hover:text-[#3490c5]'}
+                ${
+                  currentStep === 0
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 border-2 border-gray-300 hover:border-[#3490c5] hover:text-[#3490c5]"
+                }
               `}
             >
               <ArrowLeft className="w-5 h-5" />
@@ -1094,16 +1577,18 @@ export default function BecomeCaregiver() {
             ) : (
               <button
                 type="submit"
-                disabled={!formData.backgroundCheckConsent}
+                disabled={!formData.backgroundCheckConsent || isSubmitting}
                 className={`
                   flex items-center gap-2 px-8 py-3 rounded-xl font-semibold transition-all shadow-lg
-                  ${formData.backgroundCheckConsent
-                    ? 'bg-green-600 text-white hover:bg-green-700 hover:shadow-xl'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'}
+                  ${
+                    formData.backgroundCheckConsent && !isSubmitting
+                      ? "bg-green-600 text-white hover:bg-green-700 hover:shadow-xl"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }
                 `}
               >
                 <CheckCircle2 className="w-5 h-5" />
-                Submit Application
+                {isSubmitting ? "Submitting..." : "Submit Application"}
               </button>
             )}
           </div>
@@ -1136,7 +1621,6 @@ export default function BecomeCaregiver() {
           </div>
         </div>
       </div>
-
 
       <style jsx>{`
         @keyframes fadeIn {
