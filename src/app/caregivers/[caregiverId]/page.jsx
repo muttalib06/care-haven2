@@ -6,23 +6,36 @@ import AvailabilityGrid from "@/components/caregiver/AvailabilityGrid";
 import EducationSection from "@/components/caregiver/EducationSection";
 import CertificatesSection from "@/components/caregiver/CertificatesSection";
 import BookingCard from "@/components/caregiver/BookingCard";
-import { use, useEffect } from "react";
-import useCaregiverDetails from "@/hooks/caregivers/useCaregiverDetails";
+import { use, useEffect, useState } from "react";
 import LoadingPage from "@/components/loading/LoadingPage";
 import DataFetchError from "@/components/errors/DataFetchError";
-// import { useRouter } from "next/router";
-// import { caregivers } from "../../data/caregivers";
+import { getSingleCaregiver } from "@/data-handling/getSingleCaregiver";
 
 export default function CaregiverProfilePage({ params }) {
-  //   const router = useRouter();
+  const [caregiver, setCaregiver] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const resolvedParams = use(params);
   const id = resolvedParams.caregiverId;
-  // console.log(id);
 
-  // Find caregiver by ID
-  const { data: caregiver, isLoading, error } = useCaregiverDetails(id);
-  // console.log(caregiver);
+  useEffect(() => {
+    if (!id) return;
+    const fetchData = async () => {
+      try {
+        // setIsLoading(true);
+        const response= await getSingleCaregiver(id);
+        setCaregiver(response?.data);
+      } catch (error) {
+        setError(error.message || "Something went wrong");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+  console.log(caregiver);
 
   useEffect(() => {
     window.scrollTo(0, 0);

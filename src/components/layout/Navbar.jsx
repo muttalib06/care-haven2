@@ -6,8 +6,11 @@ import { Menu, X, User } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+
 
 function Navbar(props) {
+  const router = useRouter()
   const { user, logout } = useAuth();
   // console.log(user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,6 +23,7 @@ function Navbar(props) {
         icon: "success",
         draggable: true,
       });
+      router.push("/login");
     } catch (error) {
       console.log(error);
       Swal.fire({
@@ -79,7 +83,7 @@ function Navbar(props) {
               href={"/care-guides"}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
             >
-             Care Guides
+              Care Guides
             </Link>
 
             <Link
@@ -88,6 +92,15 @@ function Navbar(props) {
             >
               About Us
             </Link>
+
+            {user && (
+              <Link
+                href="/dashboard"
+                className="text-gray-700 hover:text-[#3490c5] px-3 py-2 text-sm font-medium transition-colors duration-200"
+              >
+                Dashboard
+              </Link>
+            )}
           </div>
 
           {/* Desktop Auth Buttons & Avatar */}
@@ -185,6 +198,15 @@ function Navbar(props) {
           >
             About Us
           </Link>
+
+          {user && (
+            <Link
+              href={"/dashboard"}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#3490c5] hover:bg-gray-50 transition-colors duration-200"
+            >
+              Dashboard
+            </Link>
+          )}
 
           {/* Mobile Avatar & Auth */}
           <div className="pt-4 pb-3 border-t border-gray-200">
