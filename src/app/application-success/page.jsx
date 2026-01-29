@@ -213,7 +213,7 @@ export default function ApplicationSuccess() {
               </Link>
 
               <Link
-                href="/caregiver/resources"
+                href="/care-guides"
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-white text-[#3490c5] border-2 border-[#3490c5] rounded-xl font-semibold hover:bg-blue-50 transition-all"
               >
                 <span>Caregiver Resources</span>

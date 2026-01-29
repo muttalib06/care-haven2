@@ -1,57 +1,218 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { getCollection } from "@/lib/db";
+
+// ImageBB Upload Function
+async function uploadToImageBB(file) {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.IMAGEBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      return data.data.url; // Returns the direct image URL
+    } else {
+      throw new Error("ImageBB upload failed");
+    }
+  } catch (error) {
+    console.error("ImageBB upload error:", error);
+    throw error;
+  }
+}
 
 export async function POST(request) {
   try {
     const formData = await request.formData();
 
-    // Extract all form fields
+    // Handle profile image upload to ImageBB
+    let profileImageUrl = null;
+    const profileImage = formData.get("profileImage");
+
+    if (profileImage && profileImage.size > 0) {
+      try {
+        profileImageUrl = await uploadToImageBB(profileImage);
+        console.log(`Profile image uploaded to ImageBB: ${profileImageUrl}`);
+      } catch (error) {
+        return NextResponse.json(
+          { error: "Failed to upload profile image", details: error.message },
+          { status: 500 },
+        );
+      }
+    }
+
+    // Handle certificate uploads to ImageBB
+    const certificates = formData.getAll("certificates");
+    const certificateData = [];
+
+    if (certificates && certificates.length > 0) {
+      for (const cert of certificates) {
+        if (cert && cert.size > 0) {
+          try {
+            const certUrl = await uploadToImageBB(cert);
+
+            // Extract certificate metadata from form
+            const certName = formData.get(
+              `cert_${certificates.indexOf(cert)}_name`,
+            );
+            const certIssuer = formData.get(
+              `cert_${certificates.indexOf(cert)}_issuer`,
+            );
+            const certIssuedDate = formData.get(
+              `cert_${certificates.indexOf(cert)}_issuedDate`,
+            );
+            const certExpiryDate = formData.get(
+              `cert_${certificates.indexOf(cert)}_expiryDate`,
+            );
+
+            certificateData.push({
+              name: certName || cert.name,
+              issuedBy: certIssuer || "",
+              issuedDate:
+                certIssuedDate || new Date().toISOString().split("T")[0],
+              expiryDate: certExpiryDate || null,
+              fileUrl: certUrl,
+            });
+
+            console.log(`Certificate uploaded to ImageBB: ${certUrl}`);
+          } catch (error) {
+            console.error("Certificate upload error:", error);
+            // Continue with other certificates
+          }
+        }
+      }
+    }
+
+    // Parse education data
+    const educationRaw = formData.get("education");
+    let education = [];
+    if (educationRaw) {
+      try {
+        education = JSON.parse(educationRaw);
+      } catch (e) {
+        education = [];
+      }
+    }
+
+    // Parse availability data
+    const availabilityRaw = formData.get("availability");
+    let availability = {
+      monday: { available: false, timeSlots: [] },
+      tuesday: { available: false, timeSlots: [] },
+      wednesday: { available: false, timeSlots: [] },
+      thursday: { available: false, timeSlots: [] },
+      friday: { available: false, timeSlots: [] },
+      saturday: { available: false, timeSlots: [] },
+      sunday: { available: false, timeSlots: [] },
+    };
+
+    if (availabilityRaw) {
+      try {
+        availability = { ...availability, ...JSON.parse(availabilityRaw) };
+      } catch (e) {
+        console.error("Error parsing availability:", e);
+      }
+    }
+
+    // Extract location data
+    const locationData = {
+      city: formData.get("city") || "",
+      state: formData.get("state") || "",
+      country: formData.get("country") || "",
+      coordinates: {
+        lat: parseFloat(formData.get("latitude") || "0"),
+        lng: parseFloat(formData.get("longitude") || "0"),
+      },
+    };
+
+    // Build application data according to schema
     const applicationData = {
       // Personal Details
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
+      name: `${formData.get("firstName")} ${formData.get("lastName")}`,
       email: formData.get("email"),
       phone: formData.get("phone"),
-      dateOfBirth: formData.get("dateOfBirth"),
-      address: formData.get("address"),
-      city: formData.get("city"),
-      state: formData.get("state"),
-      zipCode: formData.get("zipCode"),
-      country: formData.get("country"),
+      image: profileImageUrl, // ImageBB URL
+
+      // Verification Status
+      verified: false, // New applications are not verified
+
+      // Rating & Reviews (defaults for new caregivers)
+      rating: 0,
+      reviewCount: 0,
+
+      // Location
+      location: locationData,
 
       // Professional Experience
-      yearsOfExperience: parseInt(formData.get("yearsOfExperience") || "0"),
+      experience: parseInt(formData.get("yearsOfExperience") || "0"),
+      hourlyRate: parseFloat(formData.get("hourlyRate") || "0"),
+      available: true, // New caregivers are available by default
+
       serviceTypes: JSON.parse(formData.get("serviceTypes") || "[]"),
       skills: JSON.parse(formData.get("skills") || "[]"),
       languages: JSON.parse(formData.get("languages") || "[]"),
+
       bio: formData.get("bio") || "",
       aboutMe: formData.get("aboutMe") || "",
-      hourlyRate: parseFloat(formData.get("hourlyRate") || "0"),
-      education: JSON.parse(formData.get("education") || "[]"),
+
+      // Certificates
+      certificates: certificateData,
+
+      // Education
+      education: education,
 
       // Availability
-      availability: JSON.parse(formData.get("availability") || "{}"),
-      minHours: parseInt(formData.get("minHours") || "0"),
-      maxDistance: parseInt(formData.get("maxDistance") || "0"),
-      liveIn: formData.get("liveIn") === "true",
-      overnight: formData.get("overnight") === "true",
+      availability: availability,
 
       // Background Check
+      backgroundCheck: {
+        completed: false, // Pending background check
+        completedDate: null,
+        status: "Pending",
+      },
       backgroundCheckConsent: formData.get("backgroundCheckConsent") === "true",
 
-      // Bank Details (encrypt these in production!)
-      accountHolderName: formData.get("accountHolderName") || "",
-      bankName: formData.get("bankName") || "",
-      accountNumber: formData.get("accountNumber") || "", // Should be encrypted
-      routingNumber: formData.get("routingNumber") || "", // Should be encrypted
-      accountType: formData.get("accountType") || "checking",
+      // Preferences
+      preferences: {
+        minHours: parseInt(formData.get("minHours") || "0"),
+        maxDistance: parseInt(formData.get("maxDistance") || "0"),
+        liveIn: formData.get("liveIn") === "true",
+        overnight: formData.get("overnight") === "true",
+      },
+
+      // Statistics (defaults for new caregivers)
+      statistics: {
+        totalBookings: 0,
+        completedBookings: 0,
+        cancelledBookings: 0,
+        responseTime: 0,
+      },
+
+      // Bank Details (these should be encrypted in production!)
+      bankDetails: {
+        accountHolderName: formData.get("accountHolderName") || "",
+        bankName: formData.get("bankName") || "",
+        accountNumber: formData.get("accountNumber") || "", // ENCRYPT THIS!
+        routingNumber: formData.get("routingNumber") || "", // ENCRYPT THIS!
+        accountType: formData.get("accountType") || "checking",
+      },
 
       // Metadata
-      appliedDate: new Date().toISOString(),
-      status: "Pending Review",
-      verified: false,
+      joinedDate: new Date().toISOString(),
+      lastActive: new Date().toISOString(),
+      status: "Pending Review", // Application status
+
+      // Additional fields for internal use
+      dateOfBirth: formData.get("dateOfBirth"),
+      address: formData.get("address"),
+      zipCode: formData.get("zipCode"),
     };
 
     // Validation
@@ -62,13 +223,9 @@ export async function POST(request) {
       );
     }
 
-    if (
-      !applicationData.email ||
-      !applicationData.firstName ||
-      !applicationData.lastName
-    ) {
+    if (!applicationData.email || !applicationData.name) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields: name and email" },
         { status: 400 },
       );
     }
@@ -82,98 +239,16 @@ export async function POST(request) {
       );
     }
 
-    // Handle profile image upload
-    const profileImage = formData.get("profileImage");
-    let profileImagePath = null;
-
-    if (profileImage && profileImage.size > 0) {
-      try {
-        const bytes = await profileImage.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Generate unique filename
-        const timestamp = Date.now();
-        const randomString = Math.random().toString(36).substring(7);
-        const fileExtension = path.extname(profileImage.name);
-        const fileName = `profile_${timestamp}_${randomString}${fileExtension}`;
-
-        const uploadDir = path.join(
-          process.cwd(),
-          "public",
-          "uploads",
-          "profiles",
-        );
-
-        // Create directory if it doesn't exist
-        await mkdir(uploadDir, { recursive: true });
-
-        profileImagePath = `/uploads/profiles/${fileName}`;
-
-        // Save file
-        await writeFile(path.join(uploadDir, fileName), buffer);
-
-        console.log(`Profile image saved: ${profileImagePath}`);
-      } catch (fileError) {
-        console.error("Profile image upload error:", fileError);
-        return NextResponse.json(
-          {
-            error: "Failed to upload profile image",
-            details: fileError.message,
-          },
-          { status: 500 },
-        );
-      }
+    // Phone validation (basic)
+    if (
+      applicationData.phone &&
+      !applicationData.phone.match(/^[\d\s\-\+\(\)]+$/)
+    ) {
+      return NextResponse.json(
+        { error: "Invalid phone format" },
+        { status: 400 },
+      );
     }
-
-    // Handle certificate uploads
-    const certificates = formData.getAll("certificates");
-    const certificatePaths = [];
-
-    if (certificates && certificates.length > 0) {
-      for (const cert of certificates) {
-        if (cert && cert.size > 0) {
-          try {
-            const bytes = await cert.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-
-            const timestamp = Date.now();
-            const randomString = Math.random().toString(36).substring(7);
-            const fileExtension = path.extname(cert.name);
-            const fileName = `cert_${timestamp}_${randomString}${fileExtension}`;
-
-            const uploadDir = path.join(
-              process.cwd(),
-              "public",
-              "uploads",
-              "certificates",
-            );
-
-            // Create directory if it doesn't exist
-            await mkdir(uploadDir, { recursive: true });
-
-            const certPath = `/uploads/certificates/${fileName}`;
-
-            // Save file
-            await writeFile(path.join(uploadDir, fileName), buffer);
-
-            certificatePaths.push({
-              name: cert.name,
-              path: certPath,
-              uploadedAt: new Date().toISOString(),
-            });
-
-            console.log(`Certificate saved: ${certPath}`);
-          } catch (certError) {
-            console.error("Certificate upload error:", certError);
-            // Continue with other certificates even if one fails
-          }
-        }
-      }
-    }
-
-    // Add file paths to application data
-    applicationData.profileImage = profileImagePath;
-    applicationData.certificateFiles = certificatePaths;
 
     // Database operations
     let caregiverCollection;
@@ -232,9 +307,6 @@ export async function POST(request) {
       );
     }
 
-    // Generate application ID
-    const applicationId = `APP-${Date.now()}-${Math.random().toString(36).substring(7).toUpperCase()}`;
-
     // Return success response
     return NextResponse.json(
       {
@@ -242,11 +314,10 @@ export async function POST(request) {
         message: "Application submitted successfully",
         data: {
           id: result.insertedId.toString(),
-          applicationId: applicationId,
-          applicantName: `${applicationData.firstName} ${applicationData.lastName}`,
+          name: applicationData.name,
           email: applicationData.email,
           status: applicationData.status,
-          appliedDate: applicationData.appliedDate,
+          joinedDate: applicationData.joinedDate,
         },
       },
       { status: 201 },
@@ -271,19 +342,13 @@ export async function POST(request) {
   }
 }
 
-// GET method to retrieve application status
+// GET method to retrieve application/caregiver data
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const applicationId = searchParams.get("id");
+    const caregiverId = searchParams.get("id");
     const email = searchParams.get("email");
-
-    if (!applicationId && !email) {
-      return NextResponse.json(
-        { error: "Application ID or email is required" },
-        { status: 400 },
-      );
-    }
+    const status = searchParams.get("status"); // Filter by status
 
     // Get database collection
     let caregiverCollection;
@@ -301,50 +366,66 @@ export async function GET(request) {
       );
     }
 
-    // Build query
-    const query = {};
-    if (applicationId) {
-      // If searching by MongoDB ID
-      try {
-        const { ObjectId } = require("mongodb");
-        query._id = new ObjectId(applicationId);
-      } catch {
+    // If specific ID or email provided, return single caregiver
+    if (caregiverId || email) {
+      const query = {};
+
+      if (caregiverId) {
+        try {
+          const { ObjectId } = require("mongodb");
+          query._id = new ObjectId(caregiverId);
+        } catch {
+          return NextResponse.json(
+            { error: "Invalid caregiver ID format" },
+            { status: 400 },
+          );
+        }
+      } else if (email) {
+        query.email = email;
+      }
+
+      const caregiver = await caregiverCollection.findOne(query);
+
+      if (!caregiver) {
         return NextResponse.json(
-          { error: "Invalid application ID format" },
-          { status: 400 },
+          { error: "Caregiver not found" },
+          { status: 404 },
         );
       }
-    } else if (email) {
-      query.email = email;
+
+      // Return caregiver data (exclude sensitive bank details)
+      const { bankDetails, ...safeData } = caregiver;
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          ...safeData,
+          id: caregiver._id.toString(),
+        },
+      });
     }
 
-    // Find application
-    const application = await caregiverCollection.findOne(query);
-
-    if (!application) {
-      return NextResponse.json(
-        { error: "Application not found" },
-        { status: 404 },
-      );
+    // Otherwise, return list of caregivers (with optional status filter)
+    const query = {};
+    if (status) {
+      query.status = status;
     }
 
-    // Return application data (exclude sensitive information)
+    const caregivers = await caregiverCollection
+      .find(query)
+      .project({ bankDetails: 0 }) // Exclude sensitive data
+      .toArray();
+
     return NextResponse.json({
       success: true,
-      data: {
-        id: application._id.toString(),
-        applicantName: `${application.firstName} ${application.lastName}`,
-        email: application.email,
-        status: application.status,
-        verified: application.verified,
-        appliedDate: application.appliedDate,
-        serviceTypes: application.serviceTypes,
-        yearsOfExperience: application.yearsOfExperience,
-        // Don't return bank details or other sensitive info
-      },
+      count: caregivers.length,
+      data: caregivers.map((c) => ({
+        ...c,
+        id: c._id.toString(),
+      })),
     });
   } catch (error) {
-    console.error("GET application error:", error);
+    console.error("GET caregiver error:", error);
     return NextResponse.json(
       { error: "Internal server error", message: error.message },
       { status: 500 },
@@ -352,32 +433,121 @@ export async function GET(request) {
   }
 }
 
-// Optional: DELETE method for testing (remove in production)
-export async function DELETE(request) {
+// PATCH method to update caregiver status (for admin approval)
+export async function PATCH(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get("email");
+    const body = await request.json();
+    const { id, email, updates } = body;
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    if (!id && !email) {
+      return NextResponse.json(
+        { error: "Caregiver ID or email is required" },
+        { status: 400 },
+      );
+    }
+
+    if (!updates) {
+      return NextResponse.json(
+        { error: "Updates object is required" },
+        { status: 400 },
+      );
     }
 
     const caregiverCollection = await getCollection("caregivers");
-    const result = await caregiverCollection.deleteOne({ email });
 
-    if (result.deletedCount === 0) {
+    // Build query
+    const query = {};
+    if (id) {
+      const { ObjectId } = require("mongodb");
+      query._id = new ObjectId(id);
+    } else {
+      query.email = email;
+    }
+
+    // Prevent updating sensitive fields directly
+    const allowedUpdates = {
+      status: updates.status,
+      verified: updates.verified,
+      rating: updates.rating,
+      reviewCount: updates.reviewCount,
+      available: updates.available,
+      lastActive: new Date().toISOString(),
+    };
+
+    // Remove undefined values
+    Object.keys(allowedUpdates).forEach(
+      (key) => allowedUpdates[key] === undefined && delete allowedUpdates[key],
+    );
+
+    // Update background check if provided
+    if (updates.backgroundCheck) {
+      allowedUpdates.backgroundCheck = updates.backgroundCheck;
+    }
+
+    const result = await caregiverCollection.updateOne(query, {
+      $set: allowedUpdates,
+    });
+
+    if (result.matchedCount === 0) {
       return NextResponse.json(
-        { error: "Application not found" },
+        { error: "Caregiver not found" },
         { status: 404 },
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Application deleted successfully",
+      message: "Caregiver updated successfully",
+      modifiedCount: result.modifiedCount,
     });
   } catch (error) {
-    console.error("DELETE application error:", error);
+    console.error("PATCH caregiver error:", error);
+    return NextResponse.json(
+      { error: "Internal server error", message: error.message },
+      { status: 500 },
+    );
+  }
+}
+
+// DELETE method (for testing only - remove in production or add proper auth)
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    const email = searchParams.get("email");
+
+    if (!id && !email) {
+      return NextResponse.json(
+        { error: "ID or email is required" },
+        { status: 400 },
+      );
+    }
+
+    const caregiverCollection = await getCollection("caregivers");
+
+    const query = {};
+    if (id) {
+      const { ObjectId } = require("mongodb");
+      query._id = new ObjectId(id);
+    } else {
+      query.email = email;
+    }
+
+    const result = await caregiverCollection.deleteOne(query);
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { error: "Caregiver not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Caregiver deleted successfully",
+    });
+  } catch (error) {
+    console.error("DELETE caregiver error:", error);
     return NextResponse.json(
       { error: "Internal server error", message: error.message },
       { status: 500 },

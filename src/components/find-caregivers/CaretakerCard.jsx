@@ -33,11 +33,9 @@ export default function CaretakerCard({ caregiver, isSaved, onToggleSave }) {
           <div className="flex items-start gap-3">
             {/* Profile Image */}
             <div className="relative">
-              <Image
+              <img
                 src={caregiver.image}
                 alt={caregiver.name}
-                width={400}
-                height={400}
                 className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 group-hover:border-[#3490c5] transition-colors"
               />
               {/* Online Status Indicator (optional) */}
